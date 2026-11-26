@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
+// Relative assets support GitHub Pages project subpaths and local previews.
 export default defineConfig({
+  base: './',
   plugins: [react()],
 })
