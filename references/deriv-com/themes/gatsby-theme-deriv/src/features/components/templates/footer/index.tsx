@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import { Footer } from '@deriv-com/blocks'
-import { qtJoin, Text } from '@deriv/quill-design'
+import { Text } from '@deriv/quill-design'
+import clsx from 'clsx'
 import {
     EuFooterNavData,
     RowFooterNavData,
@@ -93,7 +94,7 @@ export const MainFooter = () => {
             banner={DerivGoBanner}
             awards={IIPAward}
             descriptionContent={DescriptionContent}
-            className={qtJoin((region === 'eu' || is_cpa_plan) && 'mb-[120px] lg:mb-[80px]')}
+            className={clsx((region === 'eu' || is_cpa_plan) && 'mb-[120px] lg:mb-[80px]')}
         >
             <Footer.MainNavContent items={region === 'eu' ? EuFooterNavData : RowFooterNavData} cols='six' />
         </Footer.FooterBlock>
