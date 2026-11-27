@@ -1,0 +1,55 @@
+name: Archived Gatsby research check
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'references/deriv-com/**'
+      - '.github/workflows/gatsby-research-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    env:
+      HUSKY: '0'
+      CI: 'true'
+      GATSBY_TELEMETRY_DISABLED: '1'
+      GATSBY_CPU_COUNT: '1'
+      GATSBY_LANGUAGE: en
+      GATSBY_BUILD_PAGES: __local_homepage_only__
+      GATSBY_ENV: development
+      LOCAL_HOMEPAGE_RESEARCH: 'true'
+      NODE_OPTIONS: --max-old-space-size=5120
+    defaults:
+      run:
+        working-directory: references/deriv-com
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.20.8'
+          cache: npm
+          cache-dependency-path: references/deriv-com/package-lock.json
+      - name: Clean install from archived lockfile with npm 9
+        run: npx --yes --package=npm@9.9.4 -- npm ci --include=optional --no-audit --no-fund
+      - name: Check native dependencies and locked Quill peers
+        run: |
+          node native-check.cjs
+          node scripts/check-quill-peers.cjs
+      - name: Detect remaining incompatible source imports
+        shell: bash
+        run: |
+          if grep -RnE '\bqtJoin\b' themes/gatsby-theme-deriv/src --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx'; then
+            echo 'Remaining qtJoin references require review.'
+            exit 1
+          fi
+      - name: Compile local research project
+        working-directory: references/deriv-com/sites/row
+        run: node ../../node_modules/gatsby/cli.js build --log-pages
+      - name: Check homepage build exists
+        run: test -s sites/row/public/index.html
+      # No publish step or upload of the broker-branded output.

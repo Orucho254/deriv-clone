@@ -1,5 +1,6 @@
 import React from 'react'
-import { qtJoin, Text } from '@deriv/quill-design'
+import { Text } from '@deriv/quill-design'
+import clsx from 'clsx'
 import { LabelPairedChevronDownMdRegularIcon } from '@deriv/quill-icons/LabelPaired'
 import { Localize } from 'components/localization'
 
@@ -29,7 +30,7 @@ const MobileText = ({isExpand, loss_percent, toggleExpansion}: MobileTextProps) 
             )}
             <button
                 onClick={toggleExpansion}
-                className={qtJoin(
+                className={clsx(
                     'block mx-auto will-change-transform',
                     isExpand && 'rotate-180',
                 )}
