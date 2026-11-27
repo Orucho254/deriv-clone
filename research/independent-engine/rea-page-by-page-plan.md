@@ -1,96 +1,99 @@
-# Page-by-page public product investigation plan
+# Deriv.com page-by-page reverse-engineering plan
 
-## Goal
+## Objective
 
-Use REA to build an evidence-backed map of the publicly accessible Deriv website and then implement an independently branded NovaTrade experience. The target is the public website's information architecture, page composition and observable user interactions—not private broker infrastructure.
+Build a close, page-by-page **local research replica** of the publicly accessible Deriv.com website. Use REA to observe the current public site, record evidence, and implement the same information architecture, page composition, responsive behaviour, navigation and visible interactions in this repository.
+
+This repository is an unofficial study project. It must not be deployed or presented as Deriv's official website, collect Deriv credentials, process deposits, or execute real trades. Do not copy Deriv logos, proprietary illustrations, employee imagery, full blocks of text, or regulated/legal claims. Recreate layout and interaction patterns with original assets and wording. Deriv's published partner guidance expressly prohibits imitating its site or trading platforms; do not represent this project as an authorized Deriv partner or affiliate.
+
+## Source of truth
+
+- Public reference: https://deriv.com/
+- Research tool: https://github.com/morluto/rea
+- Target repository: https://github.com/Orucho254/deriv-clone
+- Inspect the current site at research time; do not assume archived Gatsby files or old screenshots represent today's site.
 
 ## Investigation rules
 
 - Inspect only pages and interactions available without an account.
-- Do not log in, create accounts, submit deposits or withdrawals, place real orders, bypass access controls, or probe undocumented/private endpoints.
-- Do not copy logos, proprietary illustrations, text, brand styling, or regulated claims. Record general layout patterns and user-visible capabilities.
-- For every finding, label it as **observed**, **inferred**, or **unknown**. Include URL, viewport, action, resulting state, evidence reference and confidence.
-- Save screenshots/captures only where permitted and keep a page index so each capture maps to a route and viewport.
-- Do not invent functionality when the public site hides it behind authentication.
+- Do not log in, create accounts, submit credentials, make deposits or withdrawals, place trades, bypass access controls, or probe private/undocumented endpoints.
+- For each finding, mark **observed**, **inferred**, or **unknown** and record URL, viewport, action, resulting state, evidence reference and confidence.
+- Capture desktop and mobile states for each page. Record screenshot IDs and link them to route + viewport.
+- Do not implement a route based only on a guessed URL. Discover destinations through visible navigation, footer links, sitemap and on-page links.
+- Do not claim live prices, account balances, funding availability, regulation or trading execution in this research build.
 
-## Route inventory to verify against the live public navigation
+## Initial route families to verify
 
-### Public homepage and discovery
-- Home page
-- Markets directory / market discovery
-- Search, market cards and category navigation
+Treat this as a discovery checklist, not a final route manifest.
 
-### Market categories
+### Homepage and market discovery
+- Homepage and global navigation
 - Forex
-- Derived / Synthetic indices
+- Derived Indices
 - Stocks
 - Commodities
-- Cryptocurrencies
-- Stock indices
+- Crypto
+- Stock Indices
 
-### Trading products and concepts
-- CFDs
-- Options
-- Multipliers or other publicly described contract types, if currently exposed
-- Contract explanations and public risk information
-
-### Platforms and tools
-- Trading platforms
-- Web terminal / charting product pages
-- Mobile and desktop product pages
-- Trading tools, calculators and market research
+### Platforms and products
+- TradingView integration information
+- Deriv Exchange
+- Deriv MT5
+- Deriv cTrader
+- Deriv Trader
+- Deriv Bot
+- Mobile app
 
 ### Account, payments and help
-- Public account-registration and login entry pages (do not submit credentials)
-- Payment method information
-- Deposit and withdrawal information pages (public content only)
-- Help centre, FAQs, contact and support pages
+- Public sign-up and login entry pages (view only; do not submit)
+- Payment methods and funding information
+- Support and help centre
+- Public FAQs and contact destinations
 
 ### Learning and company
-- Learning centre / academy / tutorials
-- About, careers, news and company information
-- Legal, terms, privacy, risk disclosures and regional notices
+- Academy / learning resources
+- About and company pages
+- News / blog
+- Legal, terms, privacy and risk information (record links and page structure; do not reproduce regulated claims)
 
-This list is a starting checklist, not a claim that every route currently exists. Discover the actual navigation, footer links, sitemap and page links before finalizing the route manifest.
+## Per-page evidence record
 
-## Per-page evidence template
+For every verified route, document:
 
-For each route, record:
-
-1. Canonical URL, page title, page family and breadcrumb.
-2. Desktop and mobile viewport dimensions used.
-3. Header, navigation, hero, content sections, sidebars, cards, tables, CTAs and footer.
-4. Typography hierarchy, spacing rhythm, grid columns, background/surface treatment and responsive changes.
-5. Visible controls and their states: hover, focus, expanded, selected, validation, empty and loading.
-6. Every CTA destination and the resulting public page/state.
-7. Search/filter/table behavior, sort behavior and pagination, if present.
-8. Accessibility clues: semantic headings, labels, keyboard operation and focus visibility.
-9. Evidence: screenshot/capture IDs and the observed action/result.
+1. Canonical URL, title, page family and breadcrumb.
+2. Desktop and mobile viewport dimensions.
+3. Header, navigation, hero, section order, cards, tables, CTAs and footer.
+4. Typography hierarchy, spacing, grid, backgrounds, borders, imagery and responsive changes.
+5. Visible controls and states: hover, focus, expanded, selected, validation, empty and loading.
+6. Every CTA destination and resulting public state.
+7. Search, filter, sort, tab, carousel, accordion and pagination behaviour.
+8. Keyboard and accessibility behaviour where observable.
+9. Screenshot/capture IDs and exact action/result evidence.
 10. Unknowns, assumptions and confidence.
 
-## Suggested REA session sequence
+## REA workflow
 
-1. Discover public sitemap, global header and footer destinations.
-2. Inspect homepage at desktop and mobile sizes; follow every first-level nav group.
-3. Inspect one page at a time. Do not jump to implementation until that page's evidence record is complete.
-4. Inspect all market category pages and compare shared versus unique sections.
-5. Inspect product/platform pages and public tools.
-6. Inspect public help, learning, payment information and legal pages.
-7. Produce a route manifest and a component inventory, with shared components separated from page-specific content.
-8. Compare NovaTrade routes against the manifest; create missing pages in small batches.
-9. Validate responsive behavior and interactions against the evidence records.
+1. Start REA against https://deriv.com/ and discover the public sitemap, header navigation, footer links and route destinations.
+2. Inspect the homepage at desktop and mobile sizes.
+3. Follow each public navigation item and inspect its destination one page at a time.
+4. Inspect market pages, then platform/product pages, then support, payments, learning and legal pages.
+5. Build a verified route manifest and reusable component inventory from observations.
+6. Implement the homepage and shared header/footer first, then each verified route family.
+7. Compare the local build against captured evidence at matching viewport sizes.
+8. Fix layout, typography, responsive behaviour and interaction differences before moving on.
 
-## Prompt to run with REA
+## REA session prompt
 
-> Use REA to investigate the publicly accessible pages of https://deriv.com/ for an independent product-research project. Start by discovering the public sitemap, navigation tree, footer links and all publicly reachable routes. Then inspect every discovered page one by one, at desktop and mobile viewport sizes where possible. For each page, produce the complete per-page evidence template from this file: page sections and their order, layout and responsive behavior, shared components, visible controls and their state changes, CTA destinations, search/filter behavior, and accessible interaction states. Capture evidence for each observation and mark every conclusion observed, inferred or unknown with a confidence level. Do not log in, create an account, submit credentials, make deposits or withdrawals, place trades, bypass authentication, or probe private/undocumented endpoints. Do not copy logos, proprietary text, illustrations or brand identity. The final output must include a verified route manifest, page-by-page UI specification, reusable component inventory, interaction matrix, evidence references and a list of unknowns. Then compare the manifest with the current NovaTrade application and propose an implementation sequence, without changing code until the page evidence has been reviewed.
+> Reverse-engineer the publicly accessible Deriv.com website at https://deriv.com/ for a private, unofficial local research replica. Discover all public routes from the current header, footer, sitemap and page links. Inspect each route one by one at desktop and mobile viewport sizes. For every route, record section order, layout geometry, typography, spacing, responsive changes, visible controls, state changes, CTA destinations and accessibility behaviour. Capture screenshots for each page and interaction. Mark every finding observed, inferred or unknown and include confidence. Do not log in, submit credentials, create accounts, deposit, withdraw, place trades, bypass authentication or inspect private/undocumented endpoints. Do not copy logos, proprietary illustrations, employee images, full text blocks or regulated/legal claims. Produce a verified route manifest, page-by-page specification, shared component inventory, interaction matrix, screenshot index and unknowns list. Do not change code until the evidence for the relevant page has been recorded.
 
-## Implementation acceptance checklist
+## Acceptance checklist
 
-- Every verified public route has a corresponding independently branded page or an explicitly documented out-of-scope reason.
-- Shared navigation and footer destinations work.
-- Each visible CTA leads somewhere meaningful.
-- Search, tabs, filters, accordions and other controls actually work.
-- Mobile layouts are intentionally designed, not just squeezed desktop layouts.
-- Tables clearly distinguish live, stale, demo and illustrative data.
-- No fabricated market feed, broker integration, account balance or payment capability is presented as real.
-- All live execution stays disabled until a provider is authorized and server-side security/risk controls are reviewed.
+- Every verified public route has a corresponding local page or a documented reason for exclusion.
+- Header, footer, dropdowns and all visible public navigation destinations work.
+- Every visible CTA has the correct public destination or a clearly disabled local-study equivalent.
+- Search, tabs, filters, accordions and other visible controls behave like their observed counterparts.
+- Desktop and mobile layouts match the evidence at the same viewport sizes.
+- Local pages use original wording and assets; no copied Deriv logo or proprietary imagery.
+- All account, payment and trade actions are inert demonstrations or clearly marked unavailable.
+- No real credentials, deposits, withdrawals, live account data or order execution are collected or processed.
+- The UI is clearly labelled as an unofficial local research build and is never presented as Deriv's official service.
