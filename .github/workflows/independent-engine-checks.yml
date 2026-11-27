@@ -1,0 +1,36 @@
+name: Independent engine checks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'application/**'
+      - 'research/independent-engine/**'
+      - '.github/workflows/independent-engine-checks.yml'
+  push:
+    branches: [codex/independent-engine-foundation]
+    paths:
+      - 'application/**'
+      - 'research/independent-engine/**'
+      - '.github/workflows/independent-engine-checks.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: application
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: application/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
