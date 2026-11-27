@@ -10,7 +10,7 @@ permissions:
   contents: read
 jobs:
   compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 35
     env:
       HUSKY: '0'
@@ -34,8 +34,8 @@ jobs:
           node-version: '18.20.8'
           cache: npm
           cache-dependency-path: references/deriv-com/package-lock.json
-      - name: Clean install from archived lockfile
-        run: npm ci --legacy-peer-deps --include=optional --no-audit --no-fund
+      - name: Clean install from archived lockfile with npm 9
+        run: npx --yes --package=npm@9.9.4 -- npm ci --legacy-peer-deps --include=optional --no-audit --no-fund
       - name: Check native dependencies
         run: node native-check.cjs
       - name: Detect remaining incompatible source imports
