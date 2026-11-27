@@ -56,22 +56,27 @@ Source: https://deriv.com/markets/forex
 
 1. Hero: currency-market headline, supporting description and demo/trade calls to action.
 2. Supporting lifestyle/trading image.
-3. Three benefit blocks (leverage, pair breadth, swap-free positioning).
-4. Instrument-type explainer blocks: major, minor, exotic and micro pairs.
-5. Searchable instrument/specifications directory. Visible columns include instrument, contract size, base currency, minimum size, volume limit, minimum spread, target spread %, maximum effective leverage, margin requirement, long/short swap and GMT trading hours.
-6. CFD and options product routes, followed by platform links.
-7. FAQ accordion section.
-8. CTA and shared grouped footer.
+3. Market-benefit section and currency pair categories: major, minor, exotic and micro pairs.
+4. Searchable instrument/specifications directory. Visible columns include instrument, contract size, base currency, minimum size, volume limit, minimum spread, target spread %, maximum effective leverage, margin requirement, long/short swap and GMT trading hours.
+5. CFD and options product routes, followed by platform links.
+6. FAQ accordion section. Observed questions cover forex benefits, reading a quote, trading costs, pair categories and exchange-rate factors.
+7. CTA and shared grouped footer.
+
+The directory exposes a search input and paginated results (10 instruments per page in the captured public page). The exact values can change with trading conditions; do not hardcode them as current data.
 
 ## Derived/Synthetic Indices detail page — observed structure
 
-Source: https://deriv.com/markets/derived-indices/synthetic-indices
+Sources: https://deriv.com/markets/derived-indices and https://deriv.com/markets/derived-indices/synthetic-indices
 
 1. Hero: Synthetic Indices headline and explanation of generated market behaviour; demo/trade calls to action.
-2. Three benefit blocks (24/7 availability, separation from real-world events, leverage positioning).
-3. Long-form product family catalogue: Crash/Boom, Volatility, Hybrid, Volatility Switch, Step, Drift Switching, Trek, Skew Step, DEX, Jump, Daily Reset, Range Break and Multi Step.
-4. Searchable instrument/specifications directory with columns similar to the forex specifications table.
-5. Remaining lower-page sections and FAQs still require full visual inspection and screenshot capture.
+2. Three benefit blocks: 24/7 availability, separation from real-world news and selected-instrument leverage information.
+3. Product family catalogue observed on the page: Crash/Boom, Volatility, Skew Step, DEX, Jump, Daily Reset, Range Break and Multi Step. The current page's full family set also includes Hybrid, Volatility Switch, Step, Drift Switching and Trek; keep the inventory current as the public page changes.
+4. Searchable instrument/specifications directory. Visible columns include instrument, contract size, base currency, minimum size, volume limit, minimum spread, target spread %, maximum effective leverage, margin requirement, long/short swap and GMT trading hours.
+5. CFD and Options product routes, followed by TradingView, MT5 and cTrader platform links.
+6. FAQ accordion section. Observed questions cover swap-free availability, indicator suitability and external news impact.
+7. Directory pagination and legal/risk footer.
+
+The directory exposes a search input and paginated results (10 instruments per page in the captured public page). Values may change; do not hardcode as live quotes or current contract conditions.
 
 ## Additional routes opened
 
@@ -84,7 +89,8 @@ Source: https://deriv.com/markets/derived-indices/synthetic-indices
 
 - Existing local route /markets/synthetic-indices does not match the observed canonical public route /markets/derived-indices/synthetic-indices.
 - Current homepage is a generic market-learning landing page. It does not yet reproduce the observed section order or density: trust metrics, six market cards, 24/7 panel, five-platform showcase, payments, testimonials, three-step onboarding and grouped footer.
-- Current forex and synthetic-index pages are generic topic templates. They need their own hero, benefits, product families, instrument/specification table, product links and FAQ structures.
+- Forex and Synthetic Indices now have dedicated local page templates, category explanations, searchable instrument directories with the observed 12-column specification structure and expandable FAQs. The data cells are explicitly marked as not connected rather than fabricating contract conditions.
+- The local specification table still needs pagination, sortable columns and verified responsive interaction capture.
 - Existing footer/navigation is a simplified generic navigation and needs a route manifest based on the verified public link inventory.
 - Existing chart and prices are demo placeholders. Keep them labelled simulated unless a lawful market-data feed is integrated.
 
@@ -107,3 +113,13 @@ Source: https://deriv.com/markets/derived-indices/synthetic-indices
 - Never imply the project is operated, endorsed or authorized by Deriv.
 - Do not copy regulatory claims or payment availability as if they apply to this project.
 - No real execution or payment integration is enabled by this audit.
+
+
+## Current public-source cross-check
+
+- Forex public page: https://deriv.com/markets/forex
+- Synthetic Indices public page: https://deriv.com/markets/derived-indices/synthetic-indices
+- Derived Indices overview: https://deriv.com/markets/derived-indices
+- TradingView platform page: https://deriv.com/trading-platforms/tradingview
+
+A web content snapshot retrieved on 27 November 2026 confirms the instrument-directory column headings and product families described above. Always re-check the live public page before implementing exact data or copy; trading specifications are subject to change.
