@@ -1,77 +1,143 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
+import { assessRisk } from './engine/risk.ts'
+import { settleRiseFall } from './engine/contracts.ts'
+import type { ContractDirection } from './engine/domain.ts'
 import './App.css'
 
 const markets = [
-  'Forex', 'Derived Indices', 'Stocks',
-  'Commodities', 'Crypto', 'Stock Indices'
+  ['Forex','Major and minor currency pairs','/markets/forex'],
+  ['Derived Indices','Synthetic and other derived market families','/markets/derived-indices'],
+  ['Stocks','Listed companies and sectors','/markets/stocks'],
+  ['Commodities','Energy, metals and agriculture','/markets/commodities'],
+  ['Crypto','Digital assets and 24/7 markets','/markets/crypto'],
+  ['Stock indices','Regional market benchmarks','/markets/stock-indices'],
 ]
-
-export default function App() {
-  const [menu, setMenu] = useState(false)
-
-  return (
-    <>
-      <header>
-        <a className="logo" href="#">TradeNova</a>
-        <button className="menu" onClick={() => setMenu(!menu)}
-          aria-expanded={menu} aria-label="Toggle navigation">
-          {menu ? 'Close' : 'Menu'}
-        </button>
-        <nav className={menu ? 'open' : ''}>
-          <a href="#markets" onClick={() => setMenu(false)}>Markets</a>
-          <a href="#platforms" onClick={() => setMenu(false)}>Platforms</a>
-          <a href="#about" onClick={() => setMenu(false)}>About</a>
-        </nav>
-        <a className="button" href="#markets">Explore markets</a>
-      </header>
-
-      <main>
-        <section className="hero">
-          <div className="hero-content">
-            <span>TRADING PLATFORM PREVIEW</span>
-            <h1>Explore markets.<br/>Discover possibilities.</h1>
-            <p>Discover financial markets and modern trading tools in one place.</p>
-            <a className="button" href="#markets">Get started</a>
-          </div>
-          <div className="preview">
-            <small>Illustrative market chart</small>
-            <svg viewBox="0 0 400 220" width="100%" aria-label="Sample price chart">
-              <path d="M0 180 H400 M0 120 H400 M0 60 H400"
-                stroke="#334155" fill="none"/>
-              <path d="M0 170 L40 150 L75 175 L110 100 L145 125 L185 65 L220 100 L260 40 L300 80 L340 30 L400 15"
-                stroke="#2dd4bf" strokeWidth="4" fill="none"/>
-            </svg>
-          </div>
-        </section>
-
-        <section id="about" className="section">
-          <h2>Trade with clarity</h2>
-          <p>Explore markets, discover platforms and learn about trading.</p>
-        </section>
-
-        <section id="markets" className="section">
-          <h2>Explore global markets</h2>
-          <div className="market-grid">
-            {markets.map((market, i) => (
-              <article key={market}>
-                <span className="number">0{i+1}</span>
-                <h3>{market}</h3>
-                <p>Discover the fundamentals of this market.</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="platforms" className="section dark">
-          <h2>Trading tools for every screen</h2>
-          <p>Desktop, tablet and mobile experiences.</p>
-        </section>
-      </main>
-
-      <footer>
-        <strong>TradeNova</strong>
-        <p>Independent development preview. No live trading or deposits.</p>
-      </footer>
-    </>
-  )
+const instruments = [
+  ['EUR/USD','Euro / US dollar','Forex','+0.24%'],
+  ['GBP/USD','British pound / US dollar','Forex','+0.11%'],
+  ['USD/JPY','US dollar / Japanese yen','Forex','−0.18%'],
+  ['Volatility 25','Illustrative simulated index','Synthetic','+0.62%'],
+  ['Volatility 50','Illustrative simulated index','Synthetic','−0.31%'],
+  ['Gold','Spot gold reference','Commodities','+0.42%'],
+  ['Bitcoin','Digital asset reference','Crypto','+1.08%'],
+  ['US 500','Broad US equity benchmark','Indices','+0.16%'],
+]
+const marketDetails: Record<string,{title:string;desc:string;topics:string[]}> = {
+  forex:{title:'Explore the world’s currency markets',desc:'Learn how currency pairs are quoted and what can move exchange rates.',topics:['Major currency pairs','Crosses and minor pairs','Emerging-market currencies']},
+  'synthetic-indices':{title:'Markets that never sleep',desc:'Explore simulated markets, volatility profiles and different price-movement models.',topics:['Volatility profiles','Step-style movement','Jump and range behaviour']},
+  stocks:{title:'Discover global companies',desc:'Explore shares, market sectors, earnings events and equity price drivers.',topics:['Technology','Healthcare','Consumer and industrials']},
+  commodities:{title:'Explore essential commodities',desc:'Learn how energy, metals and agricultural markets respond to supply and demand.',topics:['Energy','Precious metals','Agriculture']},
+  crypto:{title:'Understand digital asset markets',desc:'Explore digital assets, market structure, volatility and associated risks.',topics:['Digital asset pairs','Market volatility','Custody and execution risk']},
+  'stock-indices':{title:'Follow the broader market',desc:'Explore indices that track groups of listed companies and regional performance.',topics:['US indices','European indices','Asia-Pacific indices']},
 }
+const pages: Record<string,{title:string;desc:string;topics:string[]}> = {
+  '/trade/cfds':{title:'Understand contracts for difference.',desc:'Learn how leverage, spreads, margin and overnight financing work.',topics:['Position size and leverage','Spread, commission and swaps','Margin and liquidation risk']},
+  '/trading-platforms/tradingview':{title:'Explore chart analysis workflows.',desc:'Learn how chart layouts, indicators, drawing tools, screeners and alerts can support market research.',topics:['Chart layouts and timeframes','Indicators and drawing tools','Alerts and watchlists']},
+  '/trade/options':{title:'Understand fixed-risk contracts.',desc:'Explore duration, direction, payout, break-even and settlement concepts.',topics:['Rise and fall contracts','Duration and expiry','Payout and break-even']},
+  '/platforms':{title:'One workspace. Clear tools.',desc:'Explore market discovery, chart analysis, demo orders and trade history.',topics:['Market watchlists','Chart workspace','Order and activity panels']},
+  '/payments':{title:'Understand funding and withdrawals.',desc:'Learn about payment methods, settlement times, fees and secure account controls.',topics:['Payment method overview','Deposits and withdrawals','Security and verification']},
+  '/tools':{title:'Tools for more informed decisions.',desc:'Explore calculators and planning tools for position size and risk.',topics:['Position size calculator','Risk / reward planner','Watchlists and market notes']},
+  '/learn':{title:'Build your market knowledge.',desc:'Learn market structure, chart reading, order types and risk management.',topics:['Trading fundamentals','Technical analysis basics','Risk management']},
+  '/support':{title:'Help when you need it.',desc:'Find answers about the demo workspace, account safety and platform features.',topics:['Getting started','Demo account help','Security and privacy']},
+  '/about':{title:'Unofficial interface study.',desc:'An independent educational project. Not affiliated with any broker or trading provider.',topics:['Transparent product boundaries','Demo-first experience','Responsible technology']},
+}
+function A({to,children,className=''}:{to:string;children:React.ReactNode;className?:string}){return <a href={to} className={className}>{children}</a>}
+function Header(){const [menu,setMenu]=useState(false);return <header className="header"><A to="/" className="brand"><i>D</i>INDEPENDENT MARKET LAB</A><button className="mobile-menu" onClick={()=>setMenu(!menu)}>{menu?'Close':'Menu'}</button><nav className={menu?'nav open':'nav'}>{[['Markets','/markets'],['Forex','/markets/forex'],['Derived Indices','/markets/derived-indices'],['Trading terminal','/trade'],['Platforms','/platforms'],['Learn','/learn'],['Support','/support']].map(([n,u])=><A key={u} to={u}>{n}</A>)}</nav><div className="head-actions"><A to="/login">Log in</A><A to="/trade" className="btn small">Open demo</A></div></header>}
+function Footer(){return <footer className="footer"><div className="footer-brand"><A to="/" className="brand"><i>D</i>INDEPENDENT MARKET LAB</A><p>Unofficial local research replica of publicly visible Deriv.com pages.</p></div><div className="footer-links">{markets.map(m=><A key={m[2]} to={m[2]}>{m[0]}</A>)}<A to="/markets/derived-indices">Derived Indices overview</A><A to="/trading-platforms/tradingview">Charting workspace</A><A to="/trade/cfds">CFD education</A><A to="/payments">Payments</A><A to="/learn">Learn</A><A to="/support">Support</A></div><div className="footer-note">© 2026 Independent Market Lab · Independent project · Demo values are illustrative. No brokerage or investment service is offered.</div></footer>}
+function Hero({tag,title,desc,action='Explore markets',to='/markets'}:{tag:string;title:string;desc:string;action?:string;to?:string}){return <section className="hero"><div><small>{tag}</small><h1>{title}</h1><p>{desc}</p><A to={to} className="btn">{action} ↗</A></div><div className="hero-visual"><div className="visual-top"><span>MARKET OVERVIEW</span><b>SIMULATED</b></div><strong>$ 68,420.50 <em>+2.41%</em></strong><svg viewBox="0 0 540 220" role="img" aria-label="Illustrative price movement"><path d="M0 55H540M0 110H540M0 165H540" stroke="#ffffff" strokeOpacity=".12" strokeDasharray="4 6"/><path d="M0 180 L38 160 72 169 110 128 145 142 180 96 216 112 250 80 286 102 322 55 355 72 390 42 425 62 462 25 500 44 540 12" fill="none" stroke="#65e6c4" strokeWidth="3"/></svg><div className="times"><span>09:00</span><span>11:00</span><span>13:00</span><span>15:00</span><span>17:00</span></div></div></section>}
+function DerivedOverviewPage(){return <>
+  <Hero tag="MARKETS / DERIVED INDICES" title="Explore different types of derived markets." desc="Learn about simulated markets and indices built around defined price behaviours and strategies." action="Explore Synthetic Indices" to="/markets/derived-indices/synthetic-indices"/>
+  <section className="section"><div className="section-title"><small>DERIVED MARKET CATEGORIES</small><h2>Explore the different families</h2><p>Each category has its own design, price drivers and product characteristics. This overview is educational, not a list of live instruments.</p></div><div className="topic-grid derived-category-grid">{[['Synthetic Indices','Simulated markets with programmed price behaviour, including 24/7 availability','/markets/derived-indices/synthetic-indices'],['Basket Indices','Learn how a weighted basket can represent a group of currencies or assets','#'],['Tactical Indices','Explore indices designed around predefined strategy concepts','#']].map((x,i)=><article className="topic" key={x[0]}><small>0{i+1} / CATEGORY</small><h3>{x[0]}</h3><p>{x[1]}</p>{x[2]!=='#'&&<A to={x[2]}>Explore category ↗</A>}</article>)}</div></section>
+</>}
+function MarketCards(){return <div className="market-grid">{markets.map(([n,d,u],i)=><A to={u} className="market-card" key={u}><span>0{i+1}</span><h3>{n}</h3><p>{d}</p><b>Explore ↗</b></A>)}</div>}
+function Home(){return <>
+  <div className="app-promo"><span>MARKETS, INSIGHTS AND PRACTICE — WHEREVER YOU ARE</span><A to="/platforms">Explore the workspace <b>↗</b></A></div>
+  <section className="home-hero">
+    <div className="home-hero-copy"><small>ONE PLACE TO EXPLORE THE MARKETS</small><h1>Discover more ways to understand the markets.</h1><p>Explore global market categories, compare trading tools and build your knowledge in a clear, demo-first environment.</p><div className="hero-actions"><A to="/trade" className="btn">Try the demo workspace ↗</A><A to="/markets" className="text-link">Explore markets <b>→</b></A></div><div className="hero-proof"><span>● Demo-first experience</span><span>● Learning resources</span><span>● Risk-aware tools</span></div></div>
+    <div className="home-hero-art"><div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/><div className="art-panel"><div className="art-panel-head"><span>MARKET SNAPSHOT</span><b>ILLUSTRATIVE</b></div><div className="art-value">Market overview <em>Demo</em></div><div className="art-chart"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div><div className="art-bottom"><span>Explore asset classes</span><strong>↗</strong></div></div><div className="floating-note note-top">6 market categories</div><div className="floating-note note-bottom">Practice without live funds</div></div>
+  </section>
+  <section className="trust-strip"><div><b>6</b><span>Market categories</span></div><div><b>5</b><span>Workspace options</span></div><div><b>24/7</b><span>Learning access</span></div><div><b>Demo</b><span>Practice environment</span></div></section>
+  <section className="section home-markets"><div className="section-title"><small>EXPLORE THE MARKETS</small><h2>Find the market you want to learn about</h2><p>Get familiar with the features and risks of different asset classes.</p><A to="/markets">View all markets ↗</A></div><MarketCards/></section>
+  <section className="always-on"><div><small>MARKET ACCESS</small><h2>Explore markets on your schedule.</h2><p>Learn how continuously available synthetic and digital-asset markets differ from traditional exchange sessions.</p><A to="/markets/derived-indices/synthetic-indices">Explore derived markets ↗</A></div><div className="always-circles"><span>24</span><i>/</i><span>7</span><small>LEARN AT YOUR PACE</small></div></section>
+  <section className="section platform-showcase"><div className="section-title"><small>TOOLS AND PLATFORMS</small><h2>Choose a workspace that fits your approach</h2><p>Compare charting, desktop trading and guided practice workflows.</p></div><div className="platform-grid">{[['Chart workspace','Chart analysis and market views','/platforms','01'],['Advanced terminal','A focused multi-panel trading layout','/platforms','02'],['Quick trade view','A simplified contract practice flow','/trade','03'],['Strategy builder','Explore rule-based strategy concepts','/tools','04'],['Mobile workspace','A compact market overview on the move','/platforms','05']].map(x=><A to={x[2]} className="platform-card" key={x[3]}><small>WORKSPACE {x[3]}</small><div className="platform-glyph">{x[3]==='01'?'⌁':x[3]==='02'?'▥':x[3]==='03'?'↗':x[3]==='04'?'⌘':'▣'}</div><h3>{x[0]}</h3><p>{x[1]}</p><b>Explore workspace ↗</b></A>)}</div></section>
+  <section className="payments-band"><div className="payments-icon">⇄</div><div><small>ACCOUNT AND PAYMENT EDUCATION</small><h2>Understand funding before you get started.</h2><p>Learn about payment terminology, processing expectations and account security. No deposits or withdrawals are processed in this demo project.</p></div><A to="/payments" className="outline-btn">Payment information ↗</A></section>
+  <section className="section voices"><div className="section-title"><small>BUILT AROUND CLARITY</small><h2>A calmer way to build market knowledge</h2></div><div className="voice-grid"><article><div className="quote-mark">“</div><p>Start with the basics, understand the risks and practise the workflow before exploring more advanced tools.</p><b>Learn at your own pace</b><small>GUIDED DISCOVERY</small></article><article><div className="quote-mark">“</div><p>Keep market information, planning tools and a simulated workspace together in one place.</p><b>Keep your process organized</b><small>ONE WORKSPACE</small></article><article><div className="quote-mark">“</div><p>Know which information is illustrative and which actions are available in the demo environment.</p><b>Clear demo boundaries</b><small>TRANSPARENT PRACTICE</small></article></div></section>
+  <section className="steps-band"><div className="section-title"><small>GETTING STARTED</small><h2>Three steps to begin exploring</h2></div><div className="steps-grid"><article><span>01</span><h3>Choose a market</h3><p>Browse asset classes and learn the terms used in each market.</p></article><article><span>02</span><h3>Explore the tools</h3><p>Compare workspaces and understand how their features fit together.</p></article><article><span>03</span><h3>Practise in demo</h3><p>Try a simulated workflow with virtual funds and illustrative data.</p></article></div><A to="/trade" className="btn">Open demo workspace ↗</A></section>
+</>}
+function InstrumentTable(){const [query,setQuery]=useState('');const filtered=instruments.filter(r=>r.join(' ').toLowerCase().includes(query.toLowerCase()));return <><input className="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search instruments"/><div className="table-wrap"><table><thead><tr><th>Instrument</th><th>Market</th><th>Reference move</th><th>Data</th></tr></thead><tbody>{filtered.map(r=><tr key={r[0]}><td><b>{r[0]}</b><small>{r[1]}</small></td><td>{r[2]}</td><td className={r[3].startsWith('+')?'positive':'negative'}>{r[3]}</td><td><span className="tag">Illustrative</span></td></tr>)}</tbody></table>{!filtered.length&&<p>No instruments found.</p>}</div></>}
+function MarketsPage(){return <><Hero tag="MARKETS" title="Find a market that fits your curiosity." desc="Browse market categories, compare instruments and learn the mechanics behind each market." action="Open demo terminal" to="/trade"/><section className="section"><div className="section-title"><small>MARKET CATEGORIES</small><h2>Explore by asset class</h2></div><MarketCards/></section><section className="section"><div className="section-title"><small>INSTRUMENT DIRECTORY</small><h2>Popular instruments</h2></div><InstrumentTable/></section></>}
+function MarketPage({data,tag}:{data:{title:string;desc:string;topics:string[]};tag:string}){const [tab,setTab]=useState('Overview');return <><Hero tag={tag} title={data.title} desc={data.desc} action="Practise in demo" to="/trade"/><section className="section"><div className="section-title"><small>MARKET GUIDE</small><h2>Explore the details</h2></div><div className="tabs">{['Overview','Instruments','How it works'].map(t=><button key={t} onClick={()=>setTab(t)} className={tab===t?'active':''}>{t}</button>)}</div>{tab==='Overview'&&<div className="topic-grid">{data.topics.map((p,i)=><article className="topic" key={p}><small>0{i+1} / CATEGORY</small><h3>{p}</h3><p>Explore key characteristics, terminology and risks associated with this market.</p></article>)}</div>}{tab==='Instruments'&&<InstrumentTable/>}{tab==='How it works'&&<div className="text-panel"><h3>Understand the underlying market</h3><p>Before placing an order, review the quote source, trading hours, contract specifications, fees and potential loss. This preview has no live feed; directory values are illustrative, not executable quotes.</p></div>}</section></>}
+const marketFaqs = [
+  ['What moves market prices?','Market prices can respond to economic data, company news, supply and demand, liquidity and broader market sentiment. Different market types have different drivers.'],
+  ['Are the prices on this page live?','No. This independent project does not connect to a market-data provider. Any example values are illustrative and must not be used to make trading decisions.'],
+  ['Can I place a real trade here?','No. The terminal is a local demo simulation. It does not connect to Deriv or any other broker and cannot place real orders.'],
+]
+const forexPairs = [
+  ['EUR/USD','Euro / US dollar','Major'],
+  ['GBP/USD','Pound sterling / US dollar','Major'],
+  ['USD/JPY','US dollar / Japanese yen','Major'],
+  ['EUR/GBP','Euro / pound sterling','Minor'],
+  ['GBP/JPY','Pound sterling / Japanese yen','Minor'],
+  ['USD/SGD','US dollar / Singapore dollar','Exotic'],
+  ['USD/TRY','US dollar / Turkish lira','Exotic'],
+  ['EUR/USD micro','Euro / US dollar, smaller contract size','Micro'],
+]
+const derivedFamilies = [
+  ['Crash/Boom Indices','Families designed around abrupt directional events'],
+  ['Volatility Indices','Markets grouped by different volatility profiles'],
+  ['Hybrid Indices','Families combining more than one movement characteristic'],
+  ['Volatility Switch Indices','Markets with changing volatility conditions'],
+  ['Step Indices','Markets with step-like price movement'],
+  ['Drift Switching Indices','Markets with changing directional drift'],
+  ['Trek Indices','Markets with directional bias in their movement profile'],
+  ['Skew Step Indices','Step-style markets with asymmetric movement'],
+  ['DEX Indices','Markets featuring intermittent spikes and drops'],
+  ['Jump Indices','Markets featuring intermittent jumps'],
+  ['Daily Reset Indices','Markets with daily baseline resets'],
+  ['Range Break Indices','Markets organised around range-break behaviour'],
+  ['Multi Step Indices','Markets with multiple step sizes'],
+]
+function MarketDirectory({kind}:{kind:'forex'|'derived'}) {
+  const [query,setQuery]=useState('')
+  const [expanded,setExpanded]=useState<number|null>(0)
+  const rows=kind==='forex'?forexPairs:derivedFamilies.map(x=>[x[0],x[1],'Synthetic family'])
+  const filtered=rows.filter(row=>row.join(' ').toLowerCase().includes(query.toLowerCase()))
+  return <div className="market-detail-content">
+    <section className="section detail-benefits">
+      <div className="section-title"><small>{kind==='forex'?'CURRENCY MARKETS':'DERIVED MARKET FAMILIES'}</small><h2>{kind==='forex'?'Get familiar with currency-pair types':'Explore different movement profiles'}</h2><p>{kind==='forex'?'Currency pairs are commonly grouped by trading activity and the currencies involved.':'Derived market families are designed around different simulated price-movement characteristics.'}</p></div>
+      <div className="topic-grid">{(kind==='forex'?[['Major pairs','Pairs involving heavily traded currencies'],['Minor pairs','Pairs that do not include the US dollar'],['Exotic pairs','Pairs combining a major currency with another currency']]:[['Different profiles','Compare how movement characteristics are described'],['Always-on design','Learn how synthetic markets differ from exchange sessions'],['Simulation','Understand that these are generated market models']]).map((x,i)=><article className="topic" key={x[0]}><small>0{i+1} / GUIDE</small><h3>{x[0]}</h3><p>{x[1]}</p></article>)}</div>
+    </section>
+    <section className="section specification-section">
+      <div className="section-title"><small>INSTRUMENT DIRECTORY</small><h2>{kind==='forex'?'Explore currency pairs':'Browse derived market families'}</h2><p>Search the directory. Provider specifications and executable quotes are not connected in this independent demo.</p></div>
+      <input className="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder={kind==='forex'?'Search currency pairs…':'Search market families…'}/>
+      <div className="table-wrap"><table className="spec-table"><thead><tr><th>{kind==='forex'?'Currency pair':'Instrument'}</th><th>Contract size</th><th>Base currency</th><th>Minimum size</th><th>Volume limit</th><th>Minimum spread</th><th>Target spread</th><th>Maximum leverage</th><th>Margin required</th><th>Swap long</th><th>Swap short</th><th>Trading hours (GMT)</th></tr></thead><tbody>{filtered.map(row=><tr key={row[0]}><td><b>{row[0]}</b><small>{row[1]}</small></td>{Array.from({length:11},(_,i)=><td key={i}><span className="tag">Not connected</span></td>)}</tr>)}</tbody></table>{filtered.length===0&&<p className="empty-state">No matching instruments. Try another search.</p>}</div>
+      <p className="table-disclaimer">Contract size, minimum trade size, spreads, leverage, margin and trading hours require verified provider data. They are intentionally not invented or presented as live specifications here.</p>
+    </section>
+    <section className="section faq-section"><div className="section-title"><small>COMMON QUESTIONS</small><h2>Things to understand before exploring</h2></div><div className="faq-list">{marketFaqs.map((faq,i)=><article className="faq-item" key={faq[0]}><button onClick={()=>setExpanded(expanded===i?null:i)} aria-expanded={expanded===i}><span>{faq[0]}</span><b>{expanded===i?'−':'+'}</b></button>{expanded===i&&<p>{faq[1]}</p>}</article>)}</div></section>
+  </div>
+}
+function DetailedMarketPage({kind}:{kind:'forex'|'derived'}) {
+  const forex=kind==='forex'
+  return <>
+    <Hero tag={forex?'MARKETS / FOREX':'MARKETS / DERIVED INDICES / SYNTHETIC INDICES'} title={forex?'Explore the global currency market':'Explore simulated market movement profiles'} desc={forex?'Learn how currency pairs are quoted, how major and minor pairs differ, and which economic factors can influence exchange rates.':'Discover how generated market models are grouped by volatility and movement characteristics, and how they differ from traditional exchange-traded assets.'} action="Open demo workspace" to="/trade"/>
+    <div className="detail-intro"><span>{forex?'CURRENCY PAIRS':'SYNTHETIC MARKET MODELS'}</span><p>{forex?'Forex instruments are quoted in pairs. The first currency is the base currency and the second is the quote currency. A pair price expresses how much of the quote currency is needed for one unit of the base currency.':'Derived markets are simulated rather than directly representing ownership of an underlying asset. Their design, rules and risks vary by product family.'}</p></div>
+    <MarketDirectory kind={kind}/>
+  </>
+}
+
+function Terminal(){const [mode,setMode]=useState<'demo'|'live'>('demo');const [direction,setDirection]=useState<ContractDirection>('rise');const [stake,setStake]=useState('10');const [balance,setBalance]=useState(10000);const [symbol,setSymbol]=useState('Volatility 50');const [message,setMessage]=useState('Choose a direction and place a simulated demo order.');const [history,setHistory]=useState<string[]>([]);const place=()=>{const amount=Math.round(Number(stake)*100);const risk=assessRisk({stakeMinor:amount,availableBalanceMinor:Math.round(balance*100),openOrders:0,limits:{maxStakeMinor:100000,maxStakeBps:1000,maxOpenOrders:1}});if(!risk.allowed){setMessage('Order blocked: '+risk.code.replaceAll('_',' '));return}const entry=100+Math.random()*3;const exit=entry+(Math.random()>.48?1:-1)*(Math.random()*1.2);const result=settleRiseFall({direction,stakeMinor:amount,potentialPayoutMinor:Math.round(amount*1.85),entryQuote:entry},exit);setBalance(b=>b+result.netProfitMinor/100);const line=symbol+' · '+direction.toUpperCase()+' · $'+Number(stake).toFixed(2)+' · '+result.outcome.toUpperCase()+' · '+(result.netProfitMinor>=0?'+':'−')+'$'+Math.abs(result.netProfitMinor/100).toFixed(2);setHistory(h=>[line,...h].slice(0,6));setMessage('Simulated result: '+result.outcome+'. Net '+(result.netProfitMinor>=0?'profit ':'loss $')+'$'+Math.abs(result.netProfitMinor/100).toFixed(2)+'.')};return <div className="terminal"><div className="terminal-head"><div><small>INDEPENDENT MARKET LAB / TERMINAL</small><h1>Demo trading workspace</h1><p>Simulated prices and virtual funds. No live execution.</p></div><div className="mode"><button className={mode==='demo'?'active':''} onClick={()=>setMode('demo')}>Demo</button><button className={mode==='live'?'active':''} onClick={()=>setMode('live')}>Live</button></div></div><div className="terminal-grid"><div className="chart-panel"><div className="chart-meta"><select value={symbol} onChange={e=>setSymbol(e.target.value)}><option>Volatility 50</option><option>Volatility 25</option><option>EUR/USD</option><option>Gold</option><option>Bitcoin</option></select><span className="tag">SIMULATED FEED</span></div><h2>100.245 <em>+0.42%</em></h2><svg viewBox="0 0 760 320" role="img" aria-label="Illustrative chart">{[50,110,170,230,290].map(y=><line key={y} x1="0" x2="760" y1={y} y2={y} stroke="#263849" strokeDasharray="4 6"/>)}<path d="M0 250 L40 230 80 245 120 190 160 205 200 150 240 174 280 135 320 160 360 112 400 132 440 88 480 105 520 62 560 82 600 42 640 70 680 35 720 52 760 22" fill="none" stroke="#39c9a5" strokeWidth="3"/></svg><p className="chart-note">Illustrative chart only · no external price feed connected</p></div><aside className="ticket"><div className="ticket-head"><h2>Order ticket</h2><span className="tag">DEMO ONLY</span></div>{mode==='live'?<div className="locked"><h3>Live trading is not connected</h3><p>Connect an authorized execution provider and complete server-side risk checks before enabling real orders.</p><button disabled>Live orders unavailable</button></div>:<><label>Market</label><select value={symbol} onChange={e=>setSymbol(e.target.value)}><option>Volatility 50</option><option>Volatility 25</option><option>EUR/USD</option><option>Gold</option><option>Bitcoin</option></select><label>Stake (USD)</label><input type="number" min="1" step="1" value={stake} onChange={e=>setStake(e.target.value)}/><div className="direction"><button className={direction==='rise'?'rise selected':'rise'} onClick={()=>setDirection('rise')}>↗ Rise</button><button className={direction==='fall'?'fall selected':'fall'} onClick={()=>setDirection('fall')}>↘ Fall</button></div><div className="ticket-row"><span>Potential payout</span><b>$ {(Math.max(0,Number(stake))*1.85).toFixed(2)}</b></div><div className="ticket-row"><span>Demo balance</span><b>$ {balance.toFixed(2)}</b></div><button className="btn order" disabled={!(Number(stake)>0&&Number(stake)<=balance)} onClick={place}>Place demo order</button></>}<p className="message">{message}</p></aside></div><section className="section history"><div className="section-title"><small>ACTIVITY</small><h2>Recent demo activity</h2></div>{history.length?history.map((h,i)=><div className="history-row" key={i}>{h}</div>):<p>No demo orders yet.</p>}</section></div>}
+function ProductDetailPage({kind}:{kind:'cfd'|'tradingview'|'payments'}) {
+  const config={
+    cfd:{tag:'PRODUCTS / CFDs',title:'Understand how contracts for difference work.',desc:'Explore the mechanics of leveraged products, including margin, spreads, overnight financing and position risk.',eyebrow:'CFD BASICS',cards:[['Leverage and exposure','Leverage lets a smaller margin control a larger position. It magnifies both gains and losses.'],['Spread and fees','Understand the difference between bid and ask prices, spread costs, commissions and overnight financing.'],['Margin and close-out','Learn how required margin, available equity and margin close-out rules affect open positions.']],steps:['Choose an instrument and understand its contract terms.','Estimate position exposure, margin and potential loss.','Review costs and risk before using a simulated example.']},
+    tradingview:{tag:'PLATFORMS / CHART ANALYSIS',title:'Explore a more detailed charting workflow.',desc:'Understand how professional charting workspaces organise price views, indicators, drawing tools, watchlists and alerts.',eyebrow:'CHARTING WORKSPACE',cards:[['Flexible chart layouts','Compare instruments and timeframes in a workspace designed for chart-based analysis.'],['Indicators and drawing tools','Study trends and price structure with technical indicators, annotations and drawing tools.'],['Alerts and market lists','Organise instruments and create alert concepts to follow market conditions.']],steps:['Choose a market and chart timeframe.','Add indicators or drawing tools to study price behaviour.','Create a watchlist and define alert conditions for practice.']},
+    payments:{tag:'ACCOUNT INFORMATION / PAYMENTS',title:'Understand payment methods and account funding.',desc:'Learn the terminology behind deposits, withdrawals, processing times, fees and account security. This project does not process payments.',eyebrow:'PAYMENT EDUCATION',cards:[['Payment methods','Payment options vary by provider, account, location and eligibility. Always verify availability directly with the service provider.'],['Processing and fees','Processing times, limits, conversion rates and third-party fees can differ by method and jurisdiction.'],['Account security','Use official account portals, protect authentication details and never share one-time verification codes.']],steps:['Check the provider’s current supported methods and eligibility.','Review limits, currencies, processing times and fees.','Use only the provider’s secure official payment flow.']},
+  }[kind]
+  return <>
+    <Hero tag={config.tag} title={config.title} desc={config.desc} action="Explore demo workspace" to="/trade"/>
+    <section className="section product-detail"><div className="section-title"><small>{config.eyebrow}</small><h2>Understand the key components</h2><p>Original educational explanations for this independent demo project.</p></div><div className="topic-grid">{config.cards.map((card,i)=><article className="topic" key={card[0]}><small>0{i+1} / OVERVIEW</small><h3>{card[0]}</h3><p>{card[1]}</p></article>)}</div></section>
+    <section className="product-steps"><div className="section-title"><small>HOW TO EXPLORE</small><h2>A simple learning workflow</h2></div><div className="steps-grid">{config.steps.map((step,i)=><article key={step}><span>0{i+1}</span><p>{step}</p></article>)}</div><p className="product-disclaimer">This is educational information only. No provider account, real-time data, payment processing or live order execution is connected.</p></section>
+  </>
+}
+
+function GenericPage({data,tag}:{data:{title:string;desc:string;topics:string[]};tag:string}){return <><Hero tag={tag} title={data.title} desc={data.desc} action="Explore the demo" to="/trade"/><section className="section"><div className="section-title"><small>OVERVIEW</small><h2>What you can explore</h2></div><div className="topic-grid">{data.topics.map((p,i)=><article className="topic" key={p}><small>0{i+1} / GUIDE</small><h3>{p}</h3><p>Clear explanations and practical examples to help you understand the topic.</p></article>)}</div><div className="text-panel"><h3>Designed for learning and practice</h3><p>This local research build is not operated by Deriv and does not provide Deriv accounts, payments, quotes or trading services.</p></div></section></>}
+export default function App(){const path=window.location.pathname.replace(/\/$/,'')||'/';const key=path==='/markets/derived-indices/synthetic-indices'?'synthetic-indices':path.startsWith('/markets/')?path.split('/')[2]:'';let view;if(path==='/')view=<Home/>;else if(path==='/markets')view=<MarketsPage/>;else if(path==='/markets/derived-indices')view=<DerivedOverviewPage/>;else if(path==='/trade')view=<Terminal/>;else if(path==='/markets/forex')view=<DetailedMarketPage kind="forex"/>;else if(path==='/markets/derived-indices/synthetic-indices')view=<DetailedMarketPage kind="derived"/>;else if(path==='/trade/cfds')view=<ProductDetailPage kind="cfd"/>;else if(path==='/trading-platforms/tradingview')view=<ProductDetailPage kind="tradingview"/>;else if(path==='/payments')view=<ProductDetailPage kind="payments"/>;else if(marketDetails[key])view=<MarketPage data={marketDetails[key]} tag={'MARKETS / '+key.replaceAll('-',' ').toUpperCase()}/>;else if(pages[path])view=<GenericPage data={pages[path]} tag={path.slice(1).replaceAll('/',' / ').toUpperCase()}/>;else if(path==='/login')view=<GenericPage tag="ACCOUNT ACCESS" data={{title:'Your workspace starts here.',desc:'Authentication is not connected in this preview. Demo practice is available without an account.',topics:['Demo mode','Secure account design','Provider connection later']}}/>;else view=<div className="not-found"><h1>Page not found</h1><A to="/" className="btn">Back home</A></div>;return <><Header/><main>{view}</main><Footer/></>}
