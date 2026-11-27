@@ -72,20 +72,25 @@ const forexPairs = [
   ['GBP/USD','Pound sterling / US dollar','Major'],
   ['USD/JPY','US dollar / Japanese yen','Major'],
   ['EUR/GBP','Euro / pound sterling','Minor'],
-  ['AUD/NZD','Australian / New Zealand dollar','Minor'],
+  ['GBP/JPY','Pound sterling / Japanese yen','Minor'],
   ['USD/SGD','US dollar / Singapore dollar','Exotic'],
+  ['USD/TRY','US dollar / Turkish lira','Exotic'],
+  ['EUR/USD micro','Euro / US dollar, smaller contract size','Micro'],
 ]
 const derivedFamilies = [
-  ['Volatility Indices','Markets grouped by different volatility profiles'],
   ['Crash/Boom Indices','Families designed around abrupt directional events'],
-  ['Step Indices','Markets with step-like price movement'],
-  ['Jump Indices','Markets featuring intermittent jumps'],
-  ['Range Break Indices','Markets organised around range-break behaviour'],
-  ['Drift Switching Indices','Markets with changing directional drift'],
+  ['Volatility Indices','Markets grouped by different volatility profiles'],
   ['Hybrid Indices','Families combining more than one movement characteristic'],
   ['Volatility Switch Indices','Markets with changing volatility conditions'],
-  ['Multi Step Indices','Markets with multiple step sizes'],
+  ['Step Indices','Markets with step-like price movement'],
+  ['Drift Switching Indices','Markets with changing directional drift'],
+  ['Trek Indices','Markets with directional bias in their movement profile'],
   ['Skew Step Indices','Step-style markets with asymmetric movement'],
+  ['DEX Indices','Markets featuring intermittent spikes and drops'],
+  ['Jump Indices','Markets featuring intermittent jumps'],
+  ['Daily Reset Indices','Markets with daily baseline resets'],
+  ['Range Break Indices','Markets organised around range-break behaviour'],
+  ['Multi Step Indices','Markets with multiple step sizes'],
 ]
 function MarketDirectory({kind}:{kind:'forex'|'derived'}) {
   const [query,setQuery]=useState('')
@@ -100,7 +105,7 @@ function MarketDirectory({kind}:{kind:'forex'|'derived'}) {
     <section className="section specification-section">
       <div className="section-title"><small>INSTRUMENT DIRECTORY</small><h2>{kind==='forex'?'Explore currency pairs':'Browse derived market families'}</h2><p>Search the directory. Provider specifications and executable quotes are not connected in this independent demo.</p></div>
       <input className="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder={kind==='forex'?'Search currency pairs…':'Search market families…'}/>
-      <div className="table-wrap"><table><thead><tr><th>{kind==='forex'?'Pair':'Market family'}</th><th>Description</th><th>Category</th><th>Specifications</th></tr></thead><tbody>{filtered.map(row=><tr key={row[0]}><td><b>{row[0]}</b></td><td>{row[1]}</td><td>{row[2]}</td><td><span className="tag">Not connected</span></td></tr>)}</tbody></table>{filtered.length===0&&<p className="empty-state">No matching instruments. Try another search.</p>}</div>
+      <div className="table-wrap"><table className="spec-table"><thead><tr><th>{kind==='forex'?'Currency pair':'Instrument'}</th><th>Contract size</th><th>Base currency</th><th>Minimum size</th><th>Volume limit</th><th>Minimum spread</th><th>Target spread</th><th>Maximum leverage</th><th>Margin required</th><th>Swap long</th><th>Swap short</th><th>Trading hours (GMT)</th></tr></thead><tbody>{filtered.map(row=><tr key={row[0]}><td><b>{row[0]}</b><small>{row[1]}</small></td>{Array.from({length:11},(_,i)=><td key={i}><span className="tag">Not connected</span></td>)}</tr>)}</tbody></table>{filtered.length===0&&<p className="empty-state">No matching instruments. Try another search.</p>}</div>
       <p className="table-disclaimer">Contract size, minimum trade size, spreads, leverage, margin and trading hours require verified provider data. They are intentionally not invented or presented as live specifications here.</p>
     </section>
     <section className="section faq-section"><div className="section-title"><small>COMMON QUESTIONS</small><h2>Things to understand before exploring</h2></div><div className="faq-list">{marketFaqs.map((faq,i)=><article className="faq-item" key={faq[0]}><button onClick={()=>setExpanded(expanded===i?null:i)} aria-expanded={expanded===i}><span>{faq[0]}</span><b>{expanded===i?'−':'+'}</b></button>{expanded===i&&<p>{faq[1]}</p>}</article>)}</div></section>
