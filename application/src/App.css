@@ -12,3 +12,6 @@
 @media(max-width:640px){.detail-intro{grid-template-columns:1fr;gap:10px;padding:28px 6%}.specification-section table{min-width:650px}.faq-item>button{font-size:13px}}
 
 .spec-table{min-width:1450px}.spec-table th{white-space:nowrap}.spec-table td{white-space:nowrap}.spec-table td:first-child{white-space:normal;min-width:150px}
+
+.product-detail{padding-bottom:54px}.product-steps{background:#f3eae4;padding:60px 8%}.product-steps .steps-grid article{background:#fff;border:1px solid #e8ddd6;border-radius:9px;padding:20px}.product-steps .steps-grid p{font-size:13px;line-height:1.65;color:#6d6260}.product-disclaimer{font-size:11px;line-height:1.6;color:#857974;max-width:800px;margin-top:20px}
+@media(max-width:640px){.product-steps{padding:48px 6%}.product-steps .steps-grid{gap:12px}}
