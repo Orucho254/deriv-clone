@@ -1,55 +1,99 @@
-# Independent market-platform implementation plan
+# Deriv.com reverse-engineering execution plan
 
-## Project direction
+## Objective
 
-Build an independent educational market platform and demo terminal. Use publicly available Deriv.com pages only as a source of high-level product research: understand common market categories, publicly described product types, information architecture and user needs. Do **not** make a page-by-page clone or imitate Deriv's visual identity, exact page layouts, copy, logos, illustrations, trading-platform UI or domain identity.
+Reverse-engineer the publicly accessible Deriv.com website page by page, using browser observation and REA to document its information architecture, page layouts, visual hierarchy, responsive behaviour, navigation and visible interactions. Use the findings to build the Deriv Clone project in this repository.
 
-Deriv's published partner guidance says not to imitate or clone its websites or trading platforms, not to use the same colour scheme or confusingly similar names, and not to copy its content. This project is not an authorized Deriv partner product and must not be presented as Deriv or affiliated with Deriv.
+Reference site: https://deriv.com/
+Research tool: https://github.com/morluto/rea
+Repository: https://github.com/Orucho254/deriv-clone
 
-## Research source and tool
+The project is an independent implementation and is not affiliated with Deriv. Recreate the observed UI patterns and user flows using project-owned branding, original copy and original or licensed assets. Do not collect Deriv credentials, impersonate Deriv, reuse proprietary assets, or interact with real accounts/trading/payment flows.
 
-- Public product research: https://deriv.com/
-- Browser research tool: https://github.com/morluto/rea
-- Target repository: https://github.com/Orucho254/deriv-clone
+## Working method
 
-REA is for observing public information only. Record product categories and user-facing concepts, not proprietary implementation details or a pixel-perfect specification.
+1. Inspect the live public site in a browser with REA.
+2. Discover routes from the current header, footer, sitemaps and page links.
+3. Audit one route at a time. Capture desktop and mobile screenshots.
+4. Record every section, layout measurement, visible control, interaction state and destination.
+5. Implement the page in the repository.
+6. Compare local screenshots with the reference at identical viewport dimensions.
+7. Fix differences and repeat before moving to the next page.
+8. Keep an evidence ledger: observed / inferred / unknown, source URL, capture ID, viewport and confidence.
 
-## Research boundaries
+## Initial observed route inventory (27 November 2026)
 
-- Inspect only publicly accessible pages.
-- Do not log in, create accounts, submit credentials, deposit, withdraw, place trades, bypass access controls or probe private endpoints.
-- Do not download or reuse Deriv logos, proprietary images, illustrations, employee photos, full text blocks, source code or exact page styling.
-- Do not use a name, domain, colour scheme or design that could make users think this is an official Deriv site.
-- Mark findings observed, inferred or unknown and include source URL and capture reference.
-- Never represent illustrative quotes, demo balances or simulated orders as live.
+- `/` — homepage
+- `/markets/forex` — forex
+- `/markets/derived-indices/synthetic-indices` — synthetic indices
+- `/trading-platforms/tradingview` — TradingView platform
+- `/trade/cfds` — CFDs
+- `/payment-methods` — payment methods
+- `https://traders-academy.deriv.com/` — Academy
 
-## Product areas to research at a high level
+The full first-pass notes are in `research/deriv-public-audit/2026-11-27-first-pass.md`. This route list is a starting point, not a complete inventory.
 
-- Market categories: forex, derived/synthetic indices, stocks, commodities, crypto and stock indices.
-- Public trading concepts: CFDs, options and other publicly described contract types.
-- General platform needs: market discovery, charting, watchlists, risk controls, demo practice and activity history.
-- Public education and help topics: trading basics, risk education, FAQs and platform guidance.
+## Page audit template
 
-These are research topics, not a claim that every category or route is available in every jurisdiction.
+For each route capture:
 
-## Independent design and implementation
+- Canonical URL, page title, page family, parent navigation group.
+- Viewport size, browser zoom, date/time and capture ID.
+- Header state: default, hover, focused, expanded, mobile menu.
+- Hero: text hierarchy, alignment, image/illustration, background, CTA labels and destinations.
+- Every content section in exact order, including card counts and grid structure.
+- Typography, content width, gutters, vertical spacing, radii, borders, shadows and colours.
+- Tables: columns, sorting, search, pagination, tooltips and empty/loading states.
+- Tabs, accordions, carousels, filters, dropdowns, modals and their state transitions.
+- Footer groups and every destination.
+- Mobile reflow, hidden/visible elements, sticky behaviour and touch interactions.
+- Keyboard focus and accessibility labels where observable.
+- Evidence screenshots and confidence for each observation.
 
-1. Create an original visual system: distinct name, logo, palette, typography, page layouts, illustrations and copy.
-2. Build a route manifest around the independent product's actual scope, not a copy of Deriv's sitemap.
-3. Implement shared navigation, market education pages, risk tools and demo terminal with original components.
-4. Keep account, payment and live trading actions disabled unless separately authorized and securely implemented.
-5. Test desktop/mobile behaviour, keyboard access, validation and all internal navigation.
-6. Clearly label all simulated data and demo actions.
+## REA session prompt
 
-## REA prompt
+> Reverse-engineer the publicly accessible Deriv.com website page by page for the Deriv Clone project. Start at https://deriv.com/. Discover routes through the visible header, footer, sitemap and page links. For each route, capture full-page desktop and mobile screenshots, then inspect all visible interactive elements and their states. Record section order, dimensions, typography, spacing, colour values, card/table geometry, navigation destinations, responsive breakpoints and interaction behaviour. Mark every observation as observed, inferred or unknown; include URL, viewport, screenshot ID and confidence. Work through one page at a time and produce a verified route manifest plus page specifications. Do not log in, submit credentials, create accounts, deposit, withdraw, place trades, bypass authentication or probe private endpoints. Do not reuse Deriv logos, proprietary images or copied blocks of text; use project-owned branding, original copy and assets in the implementation. Do not modify code during the observation pass; first produce the evidence for the page under inspection.
 
-> Research https://deriv.com/ only to understand the broad categories of retail trading products, publicly described market types, educational topics and user needs. Do not clone the website or trading platforms, reproduce their visual design, copy text or assets, or inspect private systems. Produce a concise factual inventory of publicly described product categories and user-facing concepts with source URLs, and distinguish observed facts from inference. Do not change code. Our implementation must use an original brand, visual identity, layout, wording and components.
+## Page implementation order
 
-## Acceptance checklist
+1. Homepage and shared header/footer.
+2. Market landing page and market category pages.
+3. Forex detail: hero, benefits, pair categories, searchable specification table, product/platform links, FAQs.
+4. Derived/Synthetic Indices: hero, benefits, product-family catalogue, searchable specification table, FAQs.
+5. Product pages: CFDs, Options, Trading specifications.
+6. Platform pages: TradingView, MT5, cTrader, Deriv Trader, Deriv Bot, mobile app.
+7. Payments page.
+8. Learning pages and Academy.
+9. Tools, support, company/about and legal information pages.
 
-- Original product name, domain, visual identity, layout and copy.
-- No copied Deriv branding, logos, assets, full text or pixel-perfect UI.
-- Market education and product explanations are factually grounded and jurisdiction-aware.
-- Demo prices, balances and order outcomes are clearly simulated.
-- No real credentials, deposits, withdrawals or live orders are processed.
-- No implication of Deriv affiliation, authorization or official status.
+## Initial homepage evidence
+
+Observed homepage sequence:
+
+1. App/QR promotion.
+2. Hero with headline, supporting copy, account and trade CTAs, lifestyle imagery.
+3. Trust/awards/metrics.
+4. Six market category cards.
+5. 24/7 market availability message.
+6. Five platform/product showcase cards.
+7. Payments section.
+8. Testimonials.
+9. Three-step onboarding.
+10. Grouped footer, app promotion and risk/legal disclosure.
+
+## Initial implementation gaps
+
+- Current homepage is a generic landing page and needs to be rebuilt to match the observed section sequence.
+- Existing market category route for synthetic indices must use the observed canonical route `/markets/derived-indices/synthetic-indices`.
+- Forex and synthetic-indices pages are generic templates; they need dedicated sections and directory table interactions.
+- Footer and header need the full discovered navigation hierarchy.
+- Platform, payment and learning pages have only partial/generic coverage.
+- Terminal data and outcomes are illustrative; do not label them live.
+
+## Boundaries
+
+- Public pages only. Do not log in, submit credentials, make deposits/withdrawals, place live trades, bypass controls or probe private endpoints.
+- Use public pages as UI/interaction reference. Do not copy logos, proprietary illustrations, photos or large text passages.
+- Clearly identify the project as independent and unofficial.
+- Do not reproduce Deriv's legal or regulatory statements as claims about this project.
+- Keep real-money trading and payment execution disabled unless separately and lawfully integrated.
