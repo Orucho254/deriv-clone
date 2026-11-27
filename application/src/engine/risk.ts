@@ -19,7 +19,7 @@ export function assessRisk(request: RiskRequest): RiskDecision {
     return { allowed: false, code: 'invalid_amount', maximumStakeMinor: 0 }
   }
 
-  const balanceCap = Math.floor((availableBalanceMinor * limits.maxStakeBps) / 10_000)
+  const balanceCap = Number((BigInt(availableBalanceMinor) * BigInt(limits.maxStakeBps)) / 10_000n)
   const maximumStakeMinor = Math.min(limits.maxStakeMinor, balanceCap)
 
   if (stakeMinor > availableBalanceMinor) {
