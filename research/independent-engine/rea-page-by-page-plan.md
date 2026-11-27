@@ -1,99 +1,55 @@
-# Deriv.com page-by-page reverse-engineering plan
+# Independent market-platform implementation plan
 
-## Objective
+## Project direction
 
-Build a close, page-by-page **local research replica** of the publicly accessible Deriv.com website. Use REA to observe the current public site, record evidence, and implement the same information architecture, page composition, responsive behaviour, navigation and visible interactions in this repository.
+Build an independent educational market platform and demo terminal. Use publicly available Deriv.com pages only as a source of high-level product research: understand common market categories, publicly described product types, information architecture and user needs. Do **not** make a page-by-page clone or imitate Deriv's visual identity, exact page layouts, copy, logos, illustrations, trading-platform UI or domain identity.
 
-This repository is an unofficial study project. It must not be deployed or presented as Deriv's official website, collect Deriv credentials, process deposits, or execute real trades. Do not copy Deriv logos, proprietary illustrations, employee imagery, full blocks of text, or regulated/legal claims. Recreate layout and interaction patterns with original assets and wording. Deriv's published partner guidance expressly prohibits imitating its site or trading platforms; do not represent this project as an authorized Deriv partner or affiliate.
+Deriv's published partner guidance says not to imitate or clone its websites or trading platforms, not to use the same colour scheme or confusingly similar names, and not to copy its content. This project is not an authorized Deriv partner product and must not be presented as Deriv or affiliated with Deriv.
 
-## Source of truth
+## Research source and tool
 
-- Public reference: https://deriv.com/
-- Research tool: https://github.com/morluto/rea
+- Public product research: https://deriv.com/
+- Browser research tool: https://github.com/morluto/rea
 - Target repository: https://github.com/Orucho254/deriv-clone
-- Inspect the current site at research time; do not assume archived Gatsby files or old screenshots represent today's site.
 
-## Investigation rules
+REA is for observing public information only. Record product categories and user-facing concepts, not proprietary implementation details or a pixel-perfect specification.
 
-- Inspect only pages and interactions available without an account.
-- Do not log in, create accounts, submit credentials, make deposits or withdrawals, place trades, bypass access controls, or probe private/undocumented endpoints.
-- For each finding, mark **observed**, **inferred**, or **unknown** and record URL, viewport, action, resulting state, evidence reference and confidence.
-- Capture desktop and mobile states for each page. Record screenshot IDs and link them to route + viewport.
-- Do not implement a route based only on a guessed URL. Discover destinations through visible navigation, footer links, sitemap and on-page links.
-- Do not claim live prices, account balances, funding availability, regulation or trading execution in this research build.
+## Research boundaries
 
-## Initial route families to verify
+- Inspect only publicly accessible pages.
+- Do not log in, create accounts, submit credentials, deposit, withdraw, place trades, bypass access controls or probe private endpoints.
+- Do not download or reuse Deriv logos, proprietary images, illustrations, employee photos, full text blocks, source code or exact page styling.
+- Do not use a name, domain, colour scheme or design that could make users think this is an official Deriv site.
+- Mark findings observed, inferred or unknown and include source URL and capture reference.
+- Never represent illustrative quotes, demo balances or simulated orders as live.
 
-Treat this as a discovery checklist, not a final route manifest.
+## Product areas to research at a high level
 
-### Homepage and market discovery
-- Homepage and global navigation
-- Forex
-- Derived Indices
-- Stocks
-- Commodities
-- Crypto
-- Stock Indices
+- Market categories: forex, derived/synthetic indices, stocks, commodities, crypto and stock indices.
+- Public trading concepts: CFDs, options and other publicly described contract types.
+- General platform needs: market discovery, charting, watchlists, risk controls, demo practice and activity history.
+- Public education and help topics: trading basics, risk education, FAQs and platform guidance.
 
-### Platforms and products
-- TradingView integration information
-- Deriv Exchange
-- Deriv MT5
-- Deriv cTrader
-- Deriv Trader
-- Deriv Bot
-- Mobile app
+These are research topics, not a claim that every category or route is available in every jurisdiction.
 
-### Account, payments and help
-- Public sign-up and login entry pages (view only; do not submit)
-- Payment methods and funding information
-- Support and help centre
-- Public FAQs and contact destinations
+## Independent design and implementation
 
-### Learning and company
-- Academy / learning resources
-- About and company pages
-- News / blog
-- Legal, terms, privacy and risk information (record links and page structure; do not reproduce regulated claims)
+1. Create an original visual system: distinct name, logo, palette, typography, page layouts, illustrations and copy.
+2. Build a route manifest around the independent product's actual scope, not a copy of Deriv's sitemap.
+3. Implement shared navigation, market education pages, risk tools and demo terminal with original components.
+4. Keep account, payment and live trading actions disabled unless separately authorized and securely implemented.
+5. Test desktop/mobile behaviour, keyboard access, validation and all internal navigation.
+6. Clearly label all simulated data and demo actions.
 
-## Per-page evidence record
+## REA prompt
 
-For every verified route, document:
-
-1. Canonical URL, title, page family and breadcrumb.
-2. Desktop and mobile viewport dimensions.
-3. Header, navigation, hero, section order, cards, tables, CTAs and footer.
-4. Typography hierarchy, spacing, grid, backgrounds, borders, imagery and responsive changes.
-5. Visible controls and states: hover, focus, expanded, selected, validation, empty and loading.
-6. Every CTA destination and resulting public state.
-7. Search, filter, sort, tab, carousel, accordion and pagination behaviour.
-8. Keyboard and accessibility behaviour where observable.
-9. Screenshot/capture IDs and exact action/result evidence.
-10. Unknowns, assumptions and confidence.
-
-## REA workflow
-
-1. Start REA against https://deriv.com/ and discover the public sitemap, header navigation, footer links and route destinations.
-2. Inspect the homepage at desktop and mobile sizes.
-3. Follow each public navigation item and inspect its destination one page at a time.
-4. Inspect market pages, then platform/product pages, then support, payments, learning and legal pages.
-5. Build a verified route manifest and reusable component inventory from observations.
-6. Implement the homepage and shared header/footer first, then each verified route family.
-7. Compare the local build against captured evidence at matching viewport sizes.
-8. Fix layout, typography, responsive behaviour and interaction differences before moving on.
-
-## REA session prompt
-
-> Reverse-engineer the publicly accessible Deriv.com website at https://deriv.com/ for a private, unofficial local research replica. Discover all public routes from the current header, footer, sitemap and page links. Inspect each route one by one at desktop and mobile viewport sizes. For every route, record section order, layout geometry, typography, spacing, responsive changes, visible controls, state changes, CTA destinations and accessibility behaviour. Capture screenshots for each page and interaction. Mark every finding observed, inferred or unknown and include confidence. Do not log in, submit credentials, create accounts, deposit, withdraw, place trades, bypass authentication or inspect private/undocumented endpoints. Do not copy logos, proprietary illustrations, employee images, full text blocks or regulated/legal claims. Produce a verified route manifest, page-by-page specification, shared component inventory, interaction matrix, screenshot index and unknowns list. Do not change code until the evidence for the relevant page has been recorded.
+> Research https://deriv.com/ only to understand the broad categories of retail trading products, publicly described market types, educational topics and user needs. Do not clone the website or trading platforms, reproduce their visual design, copy text or assets, or inspect private systems. Produce a concise factual inventory of publicly described product categories and user-facing concepts with source URLs, and distinguish observed facts from inference. Do not change code. Our implementation must use an original brand, visual identity, layout, wording and components.
 
 ## Acceptance checklist
 
-- Every verified public route has a corresponding local page or a documented reason for exclusion.
-- Header, footer, dropdowns and all visible public navigation destinations work.
-- Every visible CTA has the correct public destination or a clearly disabled local-study equivalent.
-- Search, tabs, filters, accordions and other visible controls behave like their observed counterparts.
-- Desktop and mobile layouts match the evidence at the same viewport sizes.
-- Local pages use original wording and assets; no copied Deriv logo or proprietary imagery.
-- All account, payment and trade actions are inert demonstrations or clearly marked unavailable.
-- No real credentials, deposits, withdrawals, live account data or order execution are collected or processed.
-- The UI is clearly labelled as an unofficial local research build and is never presented as Deriv's official service.
+- Original product name, domain, visual identity, layout and copy.
+- No copied Deriv branding, logos, assets, full text or pixel-perfect UI.
+- Market education and product explanations are factually grounded and jurisdiction-aware.
+- Demo prices, balances and order outcomes are clearly simulated.
+- No real credentials, deposits, withdrawals or live orders are processed.
+- No implication of Deriv affiliation, authorization or official status.
