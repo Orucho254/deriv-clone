@@ -35,9 +35,11 @@ jobs:
           cache: npm
           cache-dependency-path: references/deriv-com/package-lock.json
       - name: Clean install from archived lockfile with npm 9
-        run: npx --yes --package=npm@9.9.4 -- npm ci --legacy-peer-deps --include=optional --no-audit --no-fund
-      - name: Check native dependencies
-        run: node native-check.cjs
+        run: npx --yes --package=npm@9.9.4 -- npm ci --include=optional --no-audit --no-fund
+      - name: Check native dependencies and locked Quill peers
+        run: |
+          node native-check.cjs
+          node scripts/check-quill-peers.cjs
       - name: Detect remaining incompatible source imports
         shell: bash
         run: |

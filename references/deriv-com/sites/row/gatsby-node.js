@@ -85,3 +85,30 @@ exports.createSchemaCustomization = ({ actions }) => {
         }
     `)
 }
+
+
+// The original lockfile contains a Quill version whose distributed JS lacks
+// the qtJoin named export expected by some archived dependent libraries.
+// Limit the compatibility adapter to local research compilation.
+exports.onCreateWebpackConfig = ({ actions }) => {
+    if (process.env.LOCAL_HOMEPAGE_RESEARCH !== 'true') return
+    const fs = require('node:fs')
+    const path = require('node:path')
+    let original = path.dirname(require.resolve('@deriv/quill-design'))
+    while (true) {
+        const manifest = path.join(original, 'package.json')
+        if (fs.existsSync(manifest) &&
+            JSON.parse(fs.readFileSync(manifest, 'utf8')).name === '@deriv/quill-design') break
+        const parent = path.dirname(original)
+        if (parent === original) throw new Error('Cannot locate the original Quill package')
+        original = parent
+    }
+    actions.setWebpackConfig({
+        resolve: {
+            alias: {
+                '@deriv/quill-design$': path.join(__dirname, 'quill-compat.mjs'),
+                '@archive/quill-original$': original,
+            },
+        },
+    })
+}
