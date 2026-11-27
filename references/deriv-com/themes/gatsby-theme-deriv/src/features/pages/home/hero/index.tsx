@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { FluidContainer, Heading, Section, qtJoin } from '@deriv/quill-design'
+import { FluidContainer, Heading, Section } from '@deriv/quill-design'
 import clsx from 'clsx'
 import { StaticImage } from 'gatsby-plugin-image'
 import {
@@ -32,7 +32,7 @@ const HomeHero: React.FC<HomeHeroProps> = () => {
     return (
         <>
             <Section
-                className={qtJoin(
+                className={clsx(
                     'min-h-[587px] relative isolate overflow-hidden',
                     show_banner ? 'h-[calc(100vh-var(--hero-offset))]' : 'h-[calc(100vh-136px)]',
                 )}

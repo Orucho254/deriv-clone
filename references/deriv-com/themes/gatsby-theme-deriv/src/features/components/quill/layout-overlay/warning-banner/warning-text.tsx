@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { FluidContainer, qtJoin } from '@deriv/quill-design'
+import { FluidContainer } from '@deriv/quill-design'
+import clsx from 'clsx'
 // eslint-disable-next-line import/no-unresolved
 import { useWindowSize } from 'usehooks-ts'
 import DesktopText from './desktop-text'
@@ -30,7 +31,7 @@ const WarningText = ({ loss_percent }: TextProps) => {
     return (
         <>
             <div
-                className={qtJoin(
+                className={clsx(
                     'bg-solid-slate-700 py-general-xs sm:!py-general-md fixed left-general-none top-general-none w-full z-[60]',
                 )}
                 ref={ref}
