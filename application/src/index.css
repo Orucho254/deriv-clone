@@ -1,0 +1,5 @@
+﻿*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,sans-serif;color:#172033;background:#fff}
+a{text-decoration:none;color:inherit}
+button,a{-webkit-tap-highlight-color:transparent}

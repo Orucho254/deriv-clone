@@ -1,0 +1,14 @@
+{
+  "name": "@deriv-com/components",
+  "version": "0.59.0",
+  "private": false,
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.bundle.d.ts"
+    },
+    "./style.css": "./style.css"
+  }
+}

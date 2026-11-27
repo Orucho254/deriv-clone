@@ -1,0 +1,14 @@
+{
+  "name": "@deriv-com/providers",
+  "version": "0.12.0",
+  "private": false,
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    }
+  }
+}

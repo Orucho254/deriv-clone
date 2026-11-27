@@ -1,0 +1,2434 @@
+﻿
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\data.ts =====
+import { LangItems } from '@deriv-com/providers'
+
+export const langItemsROW: LangItems = {
+    en: {
+        isDefault: true,
+        path: 'en',
+        displayName: 'English',
+        shortName: 'EN',
+        affiliateLang: 0,
+    },
+    es: {
+        path: 'es',
+        displayName: 'EspaÃ±ol',
+        shortName: 'ES',
+        affiliateLang: 8,
+    },
+    fr: {
+        path: 'fr',
+        displayName: 'FranÃ§ais',
+        shortName: 'FR',
+        affiliateLang: 2,
+    },
+    it: {
+        path: 'it',
+        displayName: 'Italiano',
+        shortName: 'IT',
+        affiliateLang: 3,
+    },
+    pl: {
+        path: 'pl',
+        displayName: 'Polski',
+        shortName: 'PL',
+        affiliateLang: 5,
+    },
+    pt: {
+        path: 'pt',
+        displayName: 'PortuguÃªs',
+        shortName: 'PT',
+        affiliateLang: 9,
+    },
+    ru: {
+        path: 'ru',
+        displayName: 'Ð ÑƒÑÑÐºÐ¸Ð¹',
+        shortName: 'RU',
+        affiliateLang: 1,
+    },
+    th: {
+        path: 'th',
+        displayName: 'à¹„à¸—à¸¢',
+        shortName: 'TH',
+        affiliateLang: 12,
+    },
+    vi: {
+        path: 'vi',
+        displayName: 'Tiáº¿ng Viá»‡t',
+        shortName: 'VI',
+        affiliateLang: 6,
+    },
+    tr: {
+        path: 'tr',
+        displayName: 'TÃ¼rkÃ§e',
+        shortName: 'TR',
+        affiliateLang: 14,
+    },
+    zhcn: {
+        path: 'zh-cn',
+        displayName: 'ç®€ä½“ä¸­æ–‡',
+        shortName: 'ç®€ä½“',
+        affiliateLang: 10,
+    },
+    zhtw: {
+        path: 'zh-tw',
+        displayName: 'ç¹é«”ä¸­æ–‡',
+        shortName: 'ç¹é«”',
+        affiliateLang: 11,
+    },
+    bn: {
+        path: 'bn',
+        displayName: 'à¦¬à¦¾à¦‚à¦²à¦¾',
+        shortName: 'BN',
+        affiliateLang: 15,
+    },
+    ar: {
+        path: 'ar',
+        displayName: 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©',
+        shortName: 'AR',
+    },
+    ko: {
+        path: 'ko',
+        displayName: 'í•œêµ­ì–´',
+        shortName: 'KO',
+        affiliateLang: 16,
+    },
+    de: {
+        path: 'de',
+        displayName: 'Deutsch',
+        shortName: 'DE',
+        affiliateLang: 16,
+    },
+    si: {
+        path: 'si',
+        displayName: 'à·ƒà·’à¶‚à·„à¶½',
+        shortName: 'SI',
+        affiliateLang: 17,
+    },
+    sw: {
+        path: 'sw',
+        displayName: 'Kiswahili',
+        shortName: 'SW',
+        affiliateLang: 18,
+    },
+}
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\index.tsx =====
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import React from 'react'
+import loadable from '@loadable/component'
+import { PageLayout } from '@deriv-com/components'
+import QuillLayout from 'features/components/quill/quill-layout'
+import TwentyYearsStrong from './years'
+import StatSection from './stats'
+import HomeHero from './hero'
+import CTA from './cta'
+import StartTradingSteps from './start-trading-steps'
+import { BuildVariantContextType } from 'features/contexts/build-variant/build-variant.context'
+import { useOpenLiveChat } from 'components/hooks/use-open-live-chat-redirection'
+import MainFooter from 'features/components/templates/footer'
+import MainRowNavigation from 'features/components/templates/navigation/main-nav'
+import useThirdPartyFlags from 'components/hooks/use-third-party-flags'
+const FastPaymentSection = loadable(() => import('./fast-payment'))
+const LiveMarketSection = loadable(() => import('./live-pricing-migration'))
+const TradeTypeSection = loadable(() => import('./trade-type'))
+const UserFriendlyPlatforms = loadable(() => import('./user-platfroms'))
+
+type PageProps = {
+    region: BuildVariantContextType['region']
+}
+
+const HomePage = ({ region }: PageProps) => {
+    useOpenLiveChat(true)
+    const isLivePricing = useThirdPartyFlags('live_pricing')
+
+    return (
+        <QuillLayout region={region}>
+            <MainRowNavigation />
+            <PageLayout>
+                <HomeHero />
+                <StatSection />
+                <TwentyYearsStrong />
+                {isLivePricing && (
+                    <LiveMarketSection
+                        fallback={<div className="h-[695px] md:h-[638.5px] lg:h-[811.78px]" />}
+                    />
+                )}
+                <UserFriendlyPlatforms
+                    fallback={<div className="h-[1805px] md:h-[1007.5px] lg:h-[999px]" />}
+                />
+                <TradeTypeSection
+                    fallback={<div className="h-[1086px] md:h-[750.5px] lg:h-[624.24px]" />}
+                />
+                <StartTradingSteps />
+                <FastPaymentSection
+                    fallback={<div className="h-[493px] md:h-[436.5px] lg:h-[579.96px]" />}
+                />
+                <CTA />
+            </PageLayout>
+            <MainFooter />
+        </QuillLayout>
+    )
+}
+
+export default HomePage
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\cta\index.tsx =====
+import React from 'react'
+import { Footer } from '@deriv-com/blocks'
+import { Heading } from '@deriv/quill-design'
+import { StaticImage } from 'gatsby-plugin-image'
+import { Localize, localize } from 'components/localization'
+import TradersHubCtaButton from 'features/components/molecules/traders-hub-cta-button'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const RowImage = (
+    <StaticImage
+        src="../../../../images/migration/home/cta_bg.png"
+        alt={localize('_t_call to action background_t_')}
+        loading="eager"
+        objectPosition="78% 0"
+        className="w-full h-full"
+        formats={['webp', 'auto']}
+        placeholder="none"
+    />
+)
+
+const EUImage = (
+    <StaticImage
+        src="../../../../images/migration/home/cta_bg_eu.png"
+        alt={localize('_t_call to action background_t_')}
+        loading="eager"
+        objectPosition="65% 0"
+        className="w-full h-full"
+        formats={['webp', 'auto']}
+        placeholder="none"
+    />
+)
+
+const CTA = () => {
+    const { region } = useBuildVariant()
+
+    return (
+        <Footer.CTABlock padding image={region === "eu" ? EUImage : RowImage}>
+            <div className="flex h-full flex-col items-start gap-gap-3xl lg:justify-center justify-end">
+                <Heading.H2 className="text-solid-slate-50 sm:max-w-[320px] max-w-[260px] xl:max-w-[480px]">
+                    <Localize translate_text="_t_Join over 2.5 million online traders_t_" />
+                </Heading.H2>
+                <div className="hidden lg:block">
+                    <TradersHubCtaButton className="flex" />
+                </div>
+            </div>
+        </Footer.CTABlock>
+    )
+}
+
+export default CTA
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\fast-payment\data.tsx =====
+import React from 'react'
+import { CardContent } from '@deriv-com/components'
+import logos from "../../../../images/svg/payments/logos.svg"
+import logos1 from "../../../../images/svg/payments/logos-1.svg"
+import logos2 from "../../../../images/svg/payments/logos-2.svg"
+import logos3 from "../../../../images/svg/payments/logos-3.svg"
+import logos4 from "../../../../images/svg/payments/logos-4.svg"
+import logos5 from "../../../../images/svg/payments/logos-5.svg"
+import logos6 from "../../../../images/svg/payments/logos-6.svg"
+import logos7 from "../../../../images/svg/payments/logos-7.svg"
+import logos8 from "../../../../images/svg/payments/logos-8.svg"
+import logos9 from "../../../../images/svg/payments/logos-9.svg"
+import logos10 from "../../../../images/svg/payments/logos-10.svg"
+import logos11 from "../../../../images/svg/payments/logos-11.svg"
+import logos12 from "../../../../images/svg/payments/logos-12.svg"
+import logos13 from "../../../../images/svg/payments/logos-13.svg"
+import logos14 from "../../../../images/svg/payments/logos-14.svg"
+import logos15 from "../../../../images/svg/payments/logos-15.svg"
+import logos16 from "../../../../images/svg/payments/logos-16.svg"
+import logos17 from "../../../../images/svg/payments/logos-17.svg"
+import logos18 from "../../../../images/svg/payments/logos-18.svg"
+import logos19 from "../../../../images/svg/payments/logos-19.svg"
+import logos20 from "../../../../images/svg/payments/logos-20.svg"
+import logos21 from "../../../../images/svg/payments/logos-21.svg"
+import logos22 from "../../../../images/svg/payments/logos-22.svg"
+import logos23 from "../../../../images/svg/payments/logos-23.svg"
+import logos24 from "../../../../images/svg/payments/logos-24.svg"
+import logos25 from "../../../../images/svg/payments/logos-25.svg"
+import logos26 from "../../../../images/svg/payments/logos-26.svg"
+import logos27 from "../../../../images/svg/payments/logos-27.svg"
+import logos28 from "../../../../images/svg/payments/logos-28.svg"
+import logos29 from "../../../../images/svg/payments/logos-29.svg"
+import logos30 from "../../../../images/svg/payments/logos-30.svg"
+import logos31 from "../../../../images/svg/payments/logos-31.svg"
+import logos32 from "../../../../images/svg/payments/logos-32.svg"
+import logos33 from "../../../../images/svg/payments/logos-33.svg"
+import logos34 from "../../../../images/svg/payments/logos-34.svg"
+import logos35 from "../../../../images/svg/payments/logos-35.svg"
+import logos36 from "../../../../images/svg/payments/logos-36.svg"
+import logos37 from "../../../../images/svg/payments/logos-37.svg"
+import logos38 from "../../../../images/svg/payments/logos-38.svg"
+import logos39 from "../../../../images/svg/payments/logos-39.svg"
+import logos40 from "../../../../images/svg/payments/logos-40.svg"
+import logos41 from "../../../../images/svg/payments/logos-41.svg"
+import logos42 from "../../../../images/svg/payments/logos-42.svg"
+import logos43 from "../../../../images/svg/payments/logos-43.svg"
+
+const toImage = (path: string, alt: string) => (
+    <img
+        src={path}
+        alt={alt}
+        height={80}
+        width={128}
+        className="max-w-[128px] h-[80px]"
+        loading="eager"
+    />
+)
+
+const Card = (icon, id: number): CardContent => ({
+    id,
+    icon,
+    color: 'gray',
+    size: 'xs',
+    align: 'center',
+    className: '!overflow-visible',
+})
+
+const data = [
+    {
+        card: Card(toImage(logos, 'Mastercard'), 1),
+        is_eu: true,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos1, 'Maestro'), 2),
+        is_eu: true,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos2, 'Visa'), 3),
+        is_eu: true,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos3, 'Visa Electron'), 4),
+        is_eu: true,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos4, 'Pix'), 5),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos5, 'Help to Pay'), 6),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos6, 'Zing Pay'), 7),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos7, 'M-Pesa'), 8),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos8, 'MTN'), 9),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos9, 'Vodafone'), 10),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos10, 'AdvCash'), 11),
+        is_eu: false,
+        is_row: true,
+    },
+    {
+        card: Card(toImage(logos11, 'AirTm'), 12),
+        is_eu: false,
+        is_row: true,
+    },
+    { card: Card(toImage(logos12, 'AstroPay'), 13), is_eu: false, is_row: true },
+    { card: Card(toImage(logos13, 'Jeton'), 14), is_eu: true, is_row: true },
+    { card: Card(toImage(logos14, 'MiFinity'), 15), is_eu: false, is_row: true },
+    { card: Card(toImage(logos15, 'Netteler'), 16), is_eu: true, is_row: true },
+    { card: Card(toImage(logos16, 'PayLivre'), 17), is_eu: false, is_row: true },
+    {
+        card: Card(toImage(logos17, 'Perfect Money'), 18),
+        is_eu: false,
+        is_row: true,
+    },
+    { card: Card(toImage(logos18, 'Skrill'), 19), is_eu: true, is_row: true },
+    {
+        card: Card(toImage(logos19, 'Skrill 1-Tap'), 20),
+        is_eu: false,
+        is_row: true,
+    },
+    { card: Card(toImage(logos20, 'StickPay'), 21), is_eu: false, is_row: true },
+    { card: Card(toImage(logos21, 'bitcoin'), 22), is_eu: false, is_row: true },
+    { card: Card(toImage(logos22, 'etherium'), 23), is_eu: false, is_row: true },
+    { card: Card(toImage(logos23, 'litecoin'), 24), is_eu: false, is_row: true },
+    { card: Card(toImage(logos24, 'USD Coin'), 25), is_eu: false, is_row: true },
+    { card: Card(toImage(logos25, '10Coins'), 26), is_eu: false, is_row: true },
+    {
+        card: Card(toImage(logos26, 'BitcoinCash'), 27),
+        is_eu: false,
+        is_row: true,
+    },
+    { card: Card(toImage(logos27, 'DogeCoin'), 28), is_eu: false, is_row: true },
+    { card: Card(toImage(logos28, 'Tron'), 29), is_eu: false, is_row: true },
+    { card: Card(toImage(logos29, 'Cardano'), 30), is_eu: false, is_row: true },
+    { card: Card(toImage(logos30, 'BNB'), 31), is_eu: false, is_row: true },
+    { card: Card(toImage(logos31, 'Banxa'), 32), is_eu: false, is_row: true },
+    { card: Card(toImage(logos32, 'Oxxo'), 33), is_eu: false, is_row: true },
+    {
+        card: Card(toImage(logos33, 'Pago Efectivo'), 34),
+        is_eu: false,
+        is_row: true,
+    },
+    { card: Card(toImage(logos34, 'SPEI'), 35), is_eu: false, is_row: true },
+    {
+        card: Card(toImage(logos35, 'paysafecard'), 36),
+        is_eu: false,
+        is_row: true,
+    },
+    { card: Card(toImage(logos36, 'derivP2P'), 37), is_eu: false, is_row: true },
+    { card: Card(toImage(logos37, 'ozow'), 38), is_eu: false, is_row: true },
+    { card: Card(toImage(logos38, 'pse'), 39), is_eu: false, is_row: true },
+    { card: Card(toImage(logos39, 'eps'), 40), is_eu: true, is_row: false },
+    { card: Card(toImage(logos40, 'giropay'), 41), is_eu: true, is_row: false },
+    { card: Card(toImage(logos41, 'przelewy24'), 40), is_eu: true, is_row: false },
+    {
+        card: Card(toImage(logos42, 'Rapid Transfer'), 41),
+        is_eu: true,
+        is_row: false,
+    },
+    { card: Card(toImage(logos43, 'iDeal'), 42), is_eu: true, is_row: false },
+]
+
+export const RowPaymentMethods: CardContent[] = data
+    .filter((obj) => obj.is_row)
+    .map((obj) => obj.card)
+
+export const EUPaymentMethods: CardContent[] = data
+    .filter((obj) => obj.is_eu)
+    .map((obj) => obj.card)
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\fast-payment\index.tsx =====
+import React, { useRef } from 'react'
+import { FastPayment } from '@deriv-com/blocks'
+import { EUPaymentMethods, RowPaymentMethods } from './data'
+import { Localize } from 'components/localization'
+import useIsInViewport from 'components/hooks/use-is-in-viewport'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const FastPaymentSection: React.FC = () => {
+    const ref = useRef<HTMLDivElement>(null)
+    const is_in_viewport = useIsInViewport(ref)
+    const { region } = useBuildVariant()
+
+    const logosAnimation = is_in_viewport
+        ? region === 'eu'
+            ? '!animate-[40s_slide_linear_infinite] rtl:!animate-[40s_slideRtl_linear_infinite]'
+            : '!animate-[100s_slide_linear_infinite] rtl:!animate-[100s_slideRtl_linear_infinite]'
+        : ''
+        
+    return (
+        <div ref={ref}>
+            <FastPayment
+                title={
+                    <Localize translate_text="_t_Fast, hassle-free deposits and withdrawals_t_" />
+                }
+                description={
+                    region === 'row' ? (
+                        <Localize translate_text="_t_60+ global payment methods. Deposit instantly starting from just USD 5. Withdraw in minutes.*_t_" />
+                    ) : (
+                        <Localize translate_text="_t_10+ global payment methods. Deposit instantly starting from just USD 10. Withdraw in minutes.*_t_" />
+                    )
+                }
+                link={{
+                    content: <Localize translate_text="_t_Learn more_t_" />,
+                    href: '/payment-methods/',
+                    descriptiveText: 'About payment methods',
+                }}
+                content={{
+                    cols: 'infinite',
+                    cards: region === 'eu' ? EUPaymentMethods : RowPaymentMethods,
+                    sliderClass: logosAnimation,
+                }}
+                disclaimer={
+                    <Localize translate_text="_t_* Availability of payment methods and processing speeds may vary based on location and selected payment option._t_" />
+                }
+            />
+        </div>
+    )
+}
+
+export default FastPaymentSection
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\hero\award-images.tsx =====
+import React from 'react'
+import clsx from 'clsx'
+import { StaticImage } from 'gatsby-plugin-image'
+import { hero_content_award_img, hero_content_award_img_rtl } from './styles.module.scss'
+import { get_lang_direction, localize } from 'components/localization'
+
+const HeroAwardImages = () => {
+    return (
+        <div
+            className={clsx(
+                'flex pb-general-xl',
+                hero_content_award_img,
+                hero_content_award_img_rtl,
+            )}
+            dir={get_lang_direction()}
+        >
+            <StaticImage
+                src="../../../../images/migration/home/award-1.png"
+                alt={localize('_t_Most Innovative Broker, UF Awards 2023_t_')}
+                width={138}
+                height={68}
+                placeholder="none"
+                formats={['auto', 'webp']}
+                loading="eager"
+            />
+            <StaticImage
+                src="../../../../images/migration/home/award-2.png"
+                alt={localize('_t_Broker of the year 2023 by FinanceFeeds_t_')}
+                width={132}
+                height={68}
+                placeholder="none"
+                formats={['auto', 'webp']}
+                loading="eager"
+            />
+            <StaticImage
+                src="../../../../images/migration/home/award-3.png"
+                alt={localize('_t_Most trusted broker APAC 2023 by UF Awards_t_')}
+                width={132}
+                height={68}
+                placeholder="none"
+                formats={['auto', 'webp']}
+                loading="eager"
+            />
+        </div>
+    )
+}
+
+export default HeroAwardImages
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\hero\description.tsx =====
+import React from 'react'
+import { Text } from '@deriv/quill-design'
+import clsx from 'clsx'
+import { hero_content_text } from './styles.module.scss'
+import { Localize } from 'components/localization'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const Description = () => {
+    const { region } = useBuildVariant()
+    
+    if (region === 'eu') {
+        return (
+            <Text
+                size="md"
+                className={clsx('text-solid-slate-50 mt-general-md', hero_content_text)}
+            >
+                <Localize translate_text="_t_Trade CFDs and multipliers on global financial markets, all in one place with 24/7 trading and worldwide support._t_" />
+            </Text>
+        )
+    }
+    if (region === 'row') {
+        return (
+            <Text
+                size="md"
+                className={clsx('text-solid-slate-50 mt-general-md', hero_content_text)}
+            >
+                <Localize translate_text="_t_Trade CFDs and options on global financial markets, all in one place with 24/7 trading and worldwide support._t_" />
+            </Text>
+        )
+    }
+}
+
+export default Description
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\hero\floating-cta.tsx =====
+import React, { ComponentProps } from 'react'
+import TradersHubCtaButton from 'features/components/molecules/traders-hub-cta-button'
+
+type FloatingCtaProps = ComponentProps<'div'>
+
+const FloatingCta = (props: FloatingCtaProps) => {
+    return (
+        <div
+            className="fixed left-50 w-full z-40 h-[68px] backdrop-blur-lg bg-opacity-white-600 flex justify-center items-center lg:hidden"
+            {...props}
+        >
+            <TradersHubCtaButton variant="primary" colorStyle="coral" />
+        </div>
+    )
+}
+
+export default FloatingCta
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\hero\hero-image.tsx =====
+import React from 'react'
+import { StaticImage } from 'gatsby-plugin-image'
+import clsx from 'clsx'
+import { hero_img, hero_img_eu, hero_img_diel } from './styles.module.scss'
+import useBuildVariant from 'features/hooks/use-build-variant'
+import { useShowCfdBanner } from 'components/hooks/use-show-cfd-banner'
+
+const HeroImage = () => {
+    const { region } = useBuildVariant()
+    const show_banner = useShowCfdBanner()
+    
+    if (region === 'row') {
+        return (
+            <div className={clsx('absolute inset-50 flex items-end -z-10', show_banner ? hero_img_diel : hero_img)}>
+                <StaticImage
+                    src="../../../../images/migration/home/home_hero_new.png"
+                    alt="hero image"
+                    placeholder="none"
+                    formats={['auto', 'webp']}
+                    loading="eager"
+                    quality={80}
+                />
+            </div>
+        )
+    }
+    if (region === 'eu') {
+        return (
+            <div className={clsx('absolute lg:inset-50 flex items-end -z-10', hero_img_eu)}>
+                <StaticImage
+                    src="../../../../images/migration/home/home_hero_new_eu.png"
+                    alt="hero image"
+                    placeholder="none"
+                    formats={['auto', 'webp']}
+                    loading="eager"
+                    quality={80}
+                />
+            </div>
+        )
+    }
+}
+
+export default HeroImage
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\hero\index.tsx =====
+import React, { ReactNode } from 'react'
+import { FluidContainer, Heading, Section, qtJoin } from '@deriv/quill-design'
+import clsx from 'clsx'
+import { StaticImage } from 'gatsby-plugin-image'
+import {
+    hero_container,
+    hero_content,
+    hero_content_rtl,
+    hero_content_gradient,
+    hero_content_btn,
+} from './styles.module.scss'
+import HeroAwardImages from './award-images'
+import HeroImage from './hero-image'
+import FloatingCta from './floating-cta'
+import Description from './description'
+import { Localize, get_lang_direction } from 'components/localization'
+import TradersHubCtaButton from 'features/components/molecules/traders-hub-cta-button'
+import { useFloatingCtaContext } from 'features/contexts/floating-cta/cta.provider'
+import { useShowCfdBanner } from 'components/hooks/use-show-cfd-banner'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+export interface HomeHeroProps {
+    children?: ReactNode
+    className?: string
+}
+
+const HomeHero: React.FC<HomeHeroProps> = () => {
+    const { region } = useBuildVariant()
+    const { visibilityPercentage, entryRef } = useFloatingCtaContext()
+    const show_banner = useShowCfdBanner()
+
+    return (
+        <>
+            <Section
+                className={qtJoin(
+                    'min-h-[587px] relative isolate overflow-hidden',
+                    show_banner ? 'h-[calc(100vh-var(--hero-offset))]' : 'h-[calc(100vh-136px)]',
+                )}
+            >
+                <StaticImage
+                    src="../../../../images/migration/home/home_hero_bg.jpg"
+                    alt="hero background image"
+                    className="w-full -z-10"
+                    placeholder="none"
+                    formats={['auto', 'webp']}
+                    loading="eager"
+                    style={{ position: 'absolute', inset: 0 }}
+                />
+                <FluidContainer className={clsx('h-full flex flex-col relative', hero_container)}>
+                    <div
+                        className={clsx(
+                            'flex flex-col mb-general-2xl',
+                            hero_content,
+                            hero_content_rtl,
+                        )}
+                        dir={get_lang_direction()}
+                    >
+                        <Heading.H1 className="text-solid-slate-50 text-[34px] lg:text-heading-h1">
+                            <Localize translate_text="_t_Trading for anyone. Anywhere. Anytime._t_" />
+                        </Heading.H1>
+                        <Description />
+                        <TradersHubCtaButton
+                            className={clsx('mt-general-2xl', hero_content_btn)}
+                            variant="primary"
+                            colorStyle="coral"
+                            ref={entryRef}
+                        />
+                    </div>
+                    {region == 'row' && <HeroAwardImages /> }
+                    <HeroImage />
+                </FluidContainer>
+                <div className={clsx('absolute -z-10 inset-50', hero_content_gradient)}></div>
+            </Section>
+            <FloatingCta
+                style={{
+                    transform: `translateY(${visibilityPercentage - 100}%)`,
+                    bottom: '-68px',
+                }}
+            />
+        </>
+    )
+}
+
+export default HomeHero
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\hero\styles.module.scss =====
+@use 'features/styles/theme/theme-mixins' as *;
+@import 'features/styles/theme/variables';
+
+.hero_container {
+    justify-content: flex-end;
+    @media only screen and (min-width: 601px){
+        justify-content: center;
+    }
+}
+.hero_content{
+    text-align: center;
+    align-items: center;
+    @media only screen and (min-width: 601px){
+        text-align: left;
+        width: 53%;
+        align-items: flex-start;
+    }
+    @media only screen and (min-width: 1024px){
+        width: 50%;
+    }
+    @media only screen and (min-width: 1920px){
+        margin-top: 0;
+    }
+}
+.hero_content_rtl{
+    @media only screen and (min-width: 601px){
+        &[dir="rtl"] {
+            text-align: right;
+            margin-right: auto;
+        }
+    }
+}
+.hero_content_btn {
+    margin-inline: auto;
+    @media only screen and (min-width: 601px){
+        margin-inline: 0;
+    }
+}
+.hero_img{
+    right: -72px;
+    width: 60vh;
+    @media only screen and (min-width: 601px){
+        margin-inline-start: auto;
+        left: auto;
+        right: -172px;
+    }
+    @media only screen and (min-width: 1024px){
+        width: 60vh;
+        right: -48px;
+    }
+}
+
+.hero_img_diel {
+    right: -72px;
+    width: 56vh;
+    @media only screen and (min-width: 601px){
+        margin-inline-start: auto;
+        left: auto;
+        right: -172px;
+    }
+    @media only screen and (min-width: 640px){
+        right: -126px;
+        width: 50vh;
+    }
+    @media only screen and (min-width: 1024px){
+        width: 52vh;
+        right: -40px;
+    }
+}
+
+.hero_img_eu {
+    width: 58vh;
+    @media only screen and (min-width: 601px){
+        margin-inline-start: auto;
+        left: auto;
+        bottom: 0;
+        right: -150px;
+        width: 59vh;
+    }
+    @media only screen and (min-width: 640px){
+        right: -141px;
+        width: 53vh;
+    }
+    @media only screen and (min-width: 708px){
+        right: -138px;
+        width: 54vh;
+    }
+    @media only screen and (min-width: 1024px){
+        right: -36px;
+        width: 57vh;
+    }
+}
+
+.hero_content_award_img {
+    margin-inline: auto;
+    gap: 10px;
+    @media only screen and (min-width: 601px){
+        position: absolute;
+        margin-inline: 0;
+        gap: 24px;
+        left: 24px;
+        bottom: 0;
+    }
+    @media screen and (min-width: 601px) and (min-height: 960px) {
+        bottom: auto;
+        top: clamp(72%,50vh + 210px,80%);
+    }
+    @media only screen and (min-width: 1024px){
+        left: 0;
+    }
+}
+.hero_content_award_img_rtl {
+    @media only screen and (min-width: 601px){
+        &[dir="rtl"] {
+            right: 50%;
+            left: auto;
+        }
+    }
+}
+.hero_content_text{
+    @media only screen and (min-width: 601px){
+        max-width: 325px;
+    }
+    @media only screen and (min-width: 1024px){
+        max-width: 100%;
+    }
+}
+.hero_content_gradient{
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.20) -8.48%, rgba(0, 0, 0, 0.60) -8.46%, rgba(0, 0, 0, 0.00) 8.92%, rgba(0, 0, 0, 0.00) 40%, rgba(0, 0, 0, 0.70) 65.27%, rgba(0, 0, 0, 0.80) 102.14%);
+    @media only screen and (min-width: 601px){
+        background: linear-gradient(to left, rgba(0, 0, 0, 0) 1.45%, rgba(0, 0, 0, 0) 34.13%, rgba(15, 10, 10, .8) 86.38%);
+    }
+    @media only screen and (min-width: 1024px){
+        background: linear-gradient(to left, rgba(0, 0, 0, 0) 1.45%, rgba(0, 0, 0, 0) 34.13%, rgba(15, 10, 10, .8) 86.38%);
+    }
+}
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\live-pricing-migration\index.tsx =====
+import React from 'react'
+import { LiveMarketBlock } from '@deriv-com/blocks'
+import { CustomLink } from '@deriv-com/components'
+import { Text } from '@deriv/quill-design'
+import { Analytics } from '@deriv-com/analytics'
+import { StandaloneChevronRightRegularIcon } from '@deriv/quill-icons'
+import LiveMarketProvider from './data-provider'
+import LiveMarketCard from './cards'
+import useBuildVariant from 'features/hooks/use-build-variant'
+import { Localize } from 'components/localization'
+
+const LiveMarketSection = () => {
+    const { region } = useBuildVariant()
+    const is_liveprice_enabled = Analytics?.getFeatureValue('tracking-buttons-config', {
+        ce_deriv_com_liveprice_cta: false,
+    })?.['ce_deriv_com_liveprice_cta']
+
+    if (is_liveprice_enabled)
+        return (
+            <LiveMarketProvider>
+                <LiveMarketBlock.Tab
+                    className="bg-background-primary-base"
+                    tabId="livemarket"
+                    header={
+                        <Localize translate_text="_t_Top trading assets and unique market indices_t_" />
+                    }
+                    tabs={[
+                        { content: <Localize translate_text="_t_Forex_t_" /> },
+                        { content: <Localize translate_text="_t_Derived indices_t_" /> },
+                        { content: <Localize translate_text="_t_ETFs_t_" /> },
+                        { content: <Localize translate_text="_t_Stocks & indices_t_" /> },
+                        { content: <Localize translate_text="_t_Cryptocurrencies_t_" /> },
+                        { content: <Localize translate_text="_t_Commodities_t_" /> },
+                    ]}
+                >
+                    <LiveMarketCard market="fx">
+                        <Text className="text-center pt-gap-3xl">
+                            {region !== "eu" && (
+                                <Localize
+                                    translate_text="_t_<0>Forex at your fingertips.</0> Currency trading with major, minor, and exotic pairs. _t_"
+                                    components={[<strong key={0} />]}
+                                />
+                            )}
+                            {region === "eu" && (
+                                <Localize
+                                    translate_text="_t_<0>Forex at your fingertips.</0> Currency trading with major and minor pairs._t_"
+                                    components={[<strong key={0} />]}
+                                />
+                            )}
+                        </Text>
+                        <CustomLink
+                            size="md"
+                            href="/markets/forex/"
+                            className="inline-flex items-center justify-center pt-gap-3xl"
+                        >
+                            <Localize translate_text="_t_See all forex pairs_t_" />
+                            <StandaloneChevronRightRegularIcon className="text-solid-slate-1400 rtl:rotate-180" />
+                        </CustomLink>
+                    </LiveMarketCard>
+                    <LiveMarketCard market="der">
+                        <Text className="text-center pt-gap-3xl">
+                            <Localize
+                                translate_text="_t_<0>Virtual markets, real opportunities.</0> Trade simulated markets, as volatile as you like._t_"
+                                components={[<strong key={0} />]}
+                            />
+                        </Text>
+                        <CustomLink
+                            size="md"
+                            href="/markets/synthetic/"
+                            className="inline-flex items-center justify-center pt-gap-3xl"
+                        >
+                            <Localize translate_text="_t_See all derived indices_t_" />
+                            <StandaloneChevronRightRegularIcon className="text-solid-slate-1400 rtl:rotate-180" />
+                        </CustomLink>
+                    </LiveMarketCard>
+                    <LiveMarketCard market="etfs">
+                        <Text className="text-center pt-gap-3xl">
+                            <Localize
+                                translate_text="_t_<0>Diversify with ETFs.</0> Trade a theme, strategy, or objective through ETFs._t_"
+                                components={[<strong key={0} />]}
+                            />
+                        </Text>
+                        <CustomLink
+                            size="md"
+                            href="/markets/exchange-traded-funds/"
+                            className="inline-flex items-center justify-center pt-gap-3xl"
+                        >
+                            <Localize translate_text="_t_See all ETFs_t_" />
+                            <StandaloneChevronRightRegularIcon className="text-solid-slate-1400 rtl:rotate-180" />
+                        </CustomLink>
+                    </LiveMarketCard>
+                    <LiveMarketCard market={['stk', 'ind']}>
+                        <Text className="text-center pt-gap-3xl">
+                            <Localize
+                                translate_text="_t_<0>You call the stocks.</0> Take a position on your favourite stocks and indices._t_"
+                                components={[<strong key={0} />]}
+                            />
+                        </Text>
+                        <CustomLink
+                            size="md"
+                            href="/markets/stock/"
+                            className="inline-flex items-center justify-center pt-gap-3xl"
+                        >
+                            <Localize translate_text="_t_See all stocks & indices_t_" />
+                            <StandaloneChevronRightRegularIcon className="text-solid-slate-1400 rtl:rotate-180" />
+                        </CustomLink>
+                    </LiveMarketCard>
+                    <LiveMarketCard market="cry">
+                        <Text className="text-center pt-gap-3xl">
+                            <Localize
+                                translate_text="_t_<0>Ride the crypto waves.</0> 24/7 trading on the price of popular cryptocurrencies._t_"
+                                components={[<strong key={0} />]}
+                            />
+                        </Text>
+                        <CustomLink
+                            size="md"
+                            href="/markets/cryptocurrencies/"
+                            className="inline-flex items-center justify-center pt-gap-3xl"
+                        >
+                            <Localize translate_text="_t_See all cryptocurrencies_t_" />
+                            <StandaloneChevronRightRegularIcon className="text-solid-slate-1400 rtl:rotate-180" />
+                        </CustomLink>
+                    </LiveMarketCard>
+                    <LiveMarketCard market="com">
+                        <Text className="text-center pt-gap-3xl">
+                            <Localize
+                                translate_text="_t_<0>Mine for commodities.</0> Trade the price of precious metals and oil._t_"
+                                components={[<strong key={0} />]}
+                            />
+                        </Text>
+                        <CustomLink
+                            size="md"
+                            href="/markets/commodities/"
+                            className="inline-flex items-center justify-center pt-gap-3xl"
+                        >
+                            <Localize translate_text="_t_See all commodities_t_" />
+                            <StandaloneChevronRightRegularIcon className="text-solid-slate-1400 rtl:rotate-180" />
+                        </CustomLink>
+                    </LiveMarketCard>
+                </LiveMarketBlock.Tab>
+            </LiveMarketProvider>
+        )
+    return null
+}
+
+export default LiveMarketSection
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\live-pricing-migration\cards\index.tsx =====
+import React, { ReactNode, useMemo } from 'react'
+import { Analytics } from '@deriv-com/analytics'
+import { CardSlider, LiveMarketContent } from '@deriv-com/components'
+import {
+    MarketForexAudusdIcon,
+    MarketForexEurusdIcon,
+    MarketForexGbpjpyIcon,
+    MarketForexGbpusdIcon,
+    MarketCryptocurrencyAdausdIcon,
+    MarketCryptocurrencyBtcusdIcon,
+    MarketCryptocurrencyDogusdIcon,
+    MarketCryptocurrencyDshusdIcon,
+    EnergyWtiOilusIcon,
+    MarketCommoditySilverusdIcon,
+    MarketCommodityGoldusdIcon,
+    MarketCommodityCopperusdIcon,
+    MarketStocksAppleIcon,
+    MarketStocksWaltDisneyIcon,
+    MarketStocksTeslaIcon,
+    MarketIndicesUsTech100Icon,
+    MarketDerivedCrash1000Icon,
+    MarketDerivedEurusdDfx10Icon,
+    MarketDerivedRangeBreak200Icon,
+    MarketIndicesUs500Icon,
+    MarketDerivedJump50Icon,
+    MarketDerivedBoom300Icon,
+    MarketDerivedCrash300Icon,
+    MarketDerivedVolatility1501sIcon,
+    MarketDerivedVolatility2501sIcon,
+    // eslint-disable-next-line import/no-unresolved
+} from '@deriv/quill-icons/Markets'
+import useLiveData from '../data-provider/useLiveData'
+import { MarketName } from '../data-provider/types'
+import { percentToDecimal, swiperOption } from '../utils'
+import { handleRedirectToTradersHub } from 'components/custom/utils'
+import useAuthCheck from 'components/hooks/use-auth-check'
+import useHandleSignup from 'components/hooks/use-handle-signup'
+import { is_rtl, Localize } from 'components/localization'
+
+const IconsMapper = {
+    // Forex Icons
+    AUDUSD: <MarketForexAudusdIcon />,
+    EURUSD: <MarketForexEurusdIcon />,
+    GBPJPY: <MarketForexGbpjpyIcon />,
+    GBPUSD: <MarketForexGbpusdIcon />,
+
+    // Derived Indices
+    Crash_1000_Index: <MarketDerivedCrash1000Icon />,
+    EURUSD_DFX_10_Index: <MarketDerivedEurusdDfx10Icon />,
+    Jump_50_Index: <MarketDerivedJump50Icon />,
+    Range_Break_200_Index: <MarketDerivedRangeBreak200Icon />,
+
+    // Derived Indices EU
+    Boom_300_Index: <MarketDerivedBoom300Icon />,
+    Crash_300_Index: <MarketDerivedCrash300Icon />,
+    'Volatility_150_(1s)_Index': <MarketDerivedVolatility1501sIcon />,
+    'Volatility_250_(1s)_Index': <MarketDerivedVolatility2501sIcon />,
+
+    // Etf's
+    EEM_US: <MarketIndicesUs500Icon />,
+    GDX_US: <MarketIndicesUs500Icon />,
+    SPY_US: <MarketIndicesUs500Icon />,
+    UNG_US: <MarketIndicesUs500Icon />,
+
+    // Stock and indices
+    AAPL: <MarketStocksAppleIcon />,
+    DIS: <MarketStocksWaltDisneyIcon />,
+    TSLA: <MarketStocksTeslaIcon />,
+    US_100: <MarketIndicesUsTech100Icon />,
+
+    // Cryptocurrencies
+    ADAUSD: <MarketCryptocurrencyAdausdIcon />,
+    BTCUSD: <MarketCryptocurrencyBtcusdIcon />,
+    DOGUSD: <MarketCryptocurrencyDogusdIcon />,
+    DSHUSD: <MarketCryptocurrencyDshusdIcon />,
+
+    // Commodities
+    WTI_OIL: <EnergyWtiOilusIcon />,
+    XAGUSD: <MarketCommoditySilverusdIcon />,
+    XAUUSD: <MarketCommodityGoldusdIcon />,
+    XCUUSD: <MarketCommodityCopperusdIcon />,
+}
+
+const LiveMarketCard = <T extends MarketName>({
+    market,
+    children,
+}: {
+    market: T | T[]
+    children: ReactNode
+}) => {
+    const [is_logged_in] = useAuthCheck()
+    const handleSignup = useHandleSignup(false, true)
+
+    const { data } = useLiveData(market)
+
+    const livePriceData: LiveMarketContent[] = useMemo(() => {
+        if (!data) return []
+        return Object.keys(data).map((key, index) => ({
+            id: index,
+            instrumentIcon: IconsMapper[key] ?? <MarketForexAudusdIcon />,
+            instrument: data[key].sym,
+            changePercentage: `${data[key].chng}`,
+            status:
+                percentToDecimal(data[key].chng) === 0
+                    ? 'remain'
+                    : percentToDecimal(data[key].chng) > 0
+                    ? 'up'
+                    : 'down',
+            bidPrice: `${data[key].bid}`,
+            askPrice: `${data[key].ask}`,
+            spread: `${data[key].sprd}`,
+            mid: data[key].mid,
+            onClickBuyButton: is_logged_in
+                ? handleRedirectToTradersHub
+                : () => {
+                      Analytics?.trackEvent('ce_deriv_com_liveprice_cta', {
+                          action: 'click',
+                          button: 'buy',
+                          instrument: data[key].sym,
+                      })
+                      handleSignup()
+                  },
+            onClickSellButton: is_logged_in
+                ? handleRedirectToTradersHub
+                : () => {
+                      Analytics?.trackEvent('ce_deriv_com_liveprice_cta', {
+                          action: 'click',
+                          button: 'sell',
+                          instrument: data[key].sym,
+                      })
+                      handleSignup()
+                  },
+            bidContent: <Localize translate_text="_t_Bid_t_" />,
+            askContent: <Localize translate_text="_t_Ask_t_" />,
+            spreadContent: <Localize translate_text="_t_Spread_t_" />,
+            buyContent: <Localize translate_text="_t_Buy_t_" />,
+            sellContent: <Localize translate_text="_t_Sell_t_" />,
+        }))
+    }, [data, is_logged_in, handleSignup])
+
+    return (
+        <>
+            <CardSlider
+                variant="LiveMarketCard"
+                swiperData={swiperOption}
+                slideClasses="max-w-[296px] !mr-gap-none !ml-gap-none"
+                className="w-screen lg:w-full [&>*:nth-child(1)]:!gap-gap-lg"
+                cards={livePriceData.slice(0, 4)}
+                dir={is_rtl() ? 'rtl' : 'ltr'}
+            />
+            <div className="flex items-center flex-col ">{children}</div>
+        </>
+    )
+}
+
+export default LiveMarketCard
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\live-pricing-migration\data-provider\index.tsx =====
+import React, { MutableRefObject, ReactNode, useEffect, useRef, useState, createContext } from 'react'
+import { type FirebaseApp, initializeApp } from 'firebase/app'
+import { getDatabase, ref, onValue, Database, type DatabaseReference } from 'firebase/database'
+import { initialLiveMarketData } from '../utils'
+import { LiveMarketRawData } from './types'
+import { firebaseConfig } from 'common/constants'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+export type LiveMarketType = {
+    liveData: LiveMarketRawData
+    liveError?: unknown
+    dbRef: MutableRefObject<DatabaseReference>
+}
+
+export const LiveMarketContext = createContext<LiveMarketType>({
+    liveData: initialLiveMarketData,
+    dbRef: null,
+})
+
+const LiveMarketProvider = ({ children }: { children: ReactNode }) => {
+    const { region } = useBuildVariant()
+    const [liveData, setLiveData] = useState<LiveMarketRawData>(initialLiveMarketData)
+    const [liveError, setLiveError] = useState({})
+    const firebaseAppRef = useRef<FirebaseApp>()
+    const firebaseDbRef = useRef<Database>()
+    const commoditiesRef = useRef<DatabaseReference>()
+
+    useEffect(() => {
+        firebaseAppRef.current = initializeApp(firebaseConfig, 'firebaseConfig')
+        firebaseDbRef.current = getDatabase(firebaseAppRef.current)
+    }, [])
+
+    useEffect(() => {
+        commoditiesRef.current = ref(firebaseDbRef.current, region === "eu" ? 'eu/mkt' : 'row/mkt')
+        const unsubscribe = onValue(
+            commoditiesRef.current,
+            (snapshot) => {
+                setLiveData(snapshot.val())
+            },
+            (err) => {
+                setLiveError(err)
+            },
+        )
+        return unsubscribe
+    }, [region])
+
+    return (
+        <LiveMarketContext.Provider
+            value={{
+                liveData,
+                liveError,
+                dbRef: commoditiesRef,
+            }}
+        >
+            {children}
+        </LiveMarketContext.Provider>
+    )
+}
+
+export default LiveMarketProvider
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\live-pricing-migration\data-provider\types.ts =====
+export interface LiveMarketRawData {
+    com: { [key in COM]: LiveMarketAssetRawData }
+    cry: { [key in CRY]: LiveMarketAssetRawData }
+    der: { [key in DER]: LiveMarketAssetRawData }
+    etfs: { [key in ETFS]: LiveMarketAssetRawData }
+    fx: { [key in FX]: LiveMarketAssetRawData }
+    ind: { [key in IND]: LiveMarketAssetRawData }
+    stk: { [key in STK]: LiveMarketAssetRawData }
+}
+
+export type MarketName = keyof LiveMarketRawData
+export type MarketAssetName<T extends MarketName> = keyof LiveMarketRawData[T]
+
+export type STK = 'AAPL' | 'DIS' | 'TSLA'
+export type IND = 'US_30' | 'US_100'
+export type FX = 'AUDUSD' | 'EURUSD' | 'GBPJPY' | 'GBPUSD' | 'USDCAD'
+export type ETFS = 'EEM_US' | 'GDX_US' | 'SPY_US' | 'UNG_US' | 'XLK_US'
+export type DER =
+    | 'Crash_1000_Index'
+    | 'EURUSD_DFX_10_Index'
+    | 'Jump_50_Index'
+    | 'Range_Break_200_Index'
+    | 'Volatility_75_Index'
+export type CRY = 'ADAUSD' | 'BTCUSD' | 'DOGUSD' | 'DSHUSD' | 'ETHUSD'
+export type COM = 'WTI_OIL' | 'XAGUSD' | 'XAUUSD' | 'XCUUSD' | 'XPDUSD'
+
+export interface LiveMarketAssetRawData {
+    ask: number
+    bid: number
+    chng: string
+    code: string
+    mid: number
+    mkt: string
+    ord: number
+    reg: string
+    sprd: number
+    sym: string
+}
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\live-pricing-migration\data-provider\useLiveData.tsx =====
+import { useContext, useDeferredValue, useMemo } from 'react'
+import { LiveMarketRawData, MarketName } from './types'
+import { LiveMarketContext } from '.'
+
+const useLiveData = <T extends MarketName>(marketName: T | T[]) => {
+    const { liveData, dbRef, liveError } = useContext(LiveMarketContext)
+
+    const marketData: LiveMarketRawData[T] = useMemo(() => {
+        if (Array.isArray(marketName)) {
+            return marketName.reduce(
+                (acc, current) => ({ ...acc, ...liveData[current] }),
+                {} as LiveMarketRawData[T],
+            )
+        } else {
+            return liveData[marketName]
+        }
+    }, [marketName, liveData])
+
+    const data = useDeferredValue(marketData)
+
+    return { data, liveError, dbRef }
+}
+
+export default useLiveData
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\live-pricing-migration\utils\index.ts =====
+export const percentToDecimal = (percentStr) => {
+    return parseFloat(percentStr) / 100
+}
+
+interface SwiperOption {
+    spaceBetween: number
+    slidesPerView: number | 'auto'
+    reverseDirection: true
+    freeMode: true
+}
+
+export const swiperOption: SwiperOption = {
+    spaceBetween: 16,
+    slidesPerView: 'auto',
+    reverseDirection: true,
+    freeMode: true,
+}
+
+export const initialLiveMarketData = {
+    com: {
+        WTI_OIL: {
+            ask: 71.945,
+            bid: 71.909,
+            chng: '0%',
+            code: 'WTI_OIL',
+            mid: 71.927,
+            mkt: 'commodities',
+            ord: 5,
+            reg: 'row',
+            sprd: 0.035,
+            sym: 'West Texas Intermediate',
+        },
+        XAGUSD: {
+            ask: 23.04,
+            bid: 23.019,
+            chng: '0%',
+            code: 'XAGUSD',
+            mid: 23.029,
+            mkt: 'commodities',
+            ord: 2,
+            reg: 'row',
+            sprd: 0.022,
+            sym: 'Silver/USD',
+        },
+        XAUUSD: {
+            ask: 1998.97,
+            bid: 1998.68,
+            chng: '0%',
+            code: 'XAUUSD',
+            mid: 1998.82,
+            mkt: 'commodities',
+            ord: 1,
+            reg: 'row',
+            sprd: 0.3,
+            sym: 'Gold/USD',
+        },
+        XCUUSD: {
+            ask: 8418.15,
+            bid: 8411.34,
+            chng: '0%',
+            code: 'XCUUSD',
+            mid: 8414.74,
+            mkt: 'commodities',
+            ord: 4,
+            reg: 'row',
+            sprd: 6.81,
+            sym: 'Copper/USD',
+        },
+        XPDUSD: {
+            ask: 945.05,
+            bid: 939.25,
+            chng: '0%',
+            code: 'XPDUSD',
+            mid: 942.15,
+            mkt: 'commodities',
+            ord: 3,
+            reg: 'row',
+            sprd: 5.8,
+            sym: 'Palladium/USD',
+        },
+    },
+    cry: {
+        ADAUSD: {
+            ask: 0.55553,
+            bid: 0.55458,
+            chng: '-6.7%',
+            code: 'ADAUSD',
+            mid: 0.55505,
+            mkt: 'cryptocurrency',
+            ord: 5,
+            reg: 'row',
+            sprd: 0.00094,
+            sym: 'ADA/USD',
+        },
+        BTCUSD: {
+            ask: 42033.801,
+            bid: 41998.558,
+            chng: '-4.1%',
+            code: 'BTCUSD',
+            mid: 42016.179,
+            mkt: 'cryptocurrency',
+            ord: 1,
+            reg: 'row',
+            sprd: 35.243,
+            sym: 'BTC/USD',
+        },
+        DOGUSD: {
+            ask: 0.09884,
+            bid: 0.09865,
+            chng: '-3.17%',
+            code: 'DOGUSD',
+            mid: 0.09874,
+            mkt: 'cryptocurrency',
+            ord: 4,
+            reg: 'row',
+            sprd: 0.0002,
+            sym: 'DOG/USD',
+        },
+        DSHUSD: {
+            ask: 32.974,
+            bid: 32.919,
+            chng: '0%',
+            code: 'DSHUSD',
+            mid: 32.946,
+            mkt: 'cryptocurrency',
+            ord: 3,
+            reg: 'row',
+            sprd: 0.055,
+            sym: 'DSH/USD',
+        },
+        ETHUSD: {
+            ask: 2249.0848,
+            bid: 2246.8532,
+            chng: '0%',
+            code: 'ETHUSD',
+            mid: 2247.969,
+            mkt: 'cryptocurrency',
+            ord: 2,
+            reg: 'row',
+            sprd: 2.23159,
+            sym: 'ETH/USD',
+        },
+    },
+    der: {
+        Crash_1000_Index: {
+            ask: 6348.5825,
+            bid: 6348.2005,
+            chng: '-0.39%',
+            code: 'Crash_1000_Index',
+            mid: 6348.3915,
+            mkt: 'derived',
+            ord: 2,
+            reg: 'row',
+            sprd: 0.3821,
+            sym: 'Crash 1000 Index',
+        },
+        EURUSD_DFX_10_Index: {
+            ask: 74282.21,
+            bid: 74273.12,
+            chng: '+0.07%',
+            code: 'EURUSD_DFX_10_Index',
+            mid: 74277.66,
+            mkt: 'derived',
+            ord: 3,
+            reg: 'row',
+            sprd: 9.09,
+            sym: 'EUR/USD DFX 10 Index',
+        },
+        Jump_50_Index: {
+            ask: 31954.63,
+            bid: 31945.86,
+            chng: '+0.08%',
+            code: 'Jump_50_Index',
+            mid: 31950.24,
+            mkt: 'derived',
+            ord: 4,
+            reg: 'row',
+            sprd: 8.78,
+            sym: 'Jump 50 Index',
+        },
+        Range_Break_200_Index: {
+            ask: 105475.5,
+            bid: 105473.5,
+            chng: '+0.5%',
+            code: 'Range_Break_200_Index',
+            mid: 105474.5,
+            mkt: 'derived',
+            ord: 5,
+            reg: 'row',
+            sprd: 2.1,
+            sym: 'Range Break 200 Index',
+        },
+        Volatility_75_Index: {
+            ask: 374905.45,
+            bid: 374005.45,
+            chng: '+3.82%',
+            code: 'Volatility_75_Index',
+            mid: 374455.45,
+            mkt: 'derived',
+            ord: 1,
+            reg: 'row',
+            sprd: 900.01,
+            sym: 'Volatility 75 Index',
+        },
+    },
+    etfs: {
+        EEM_US: {
+            ask: 39.07,
+            bid: 38.96,
+            chng: '0%',
+            code: 'EEM_US',
+            mid: 39.01,
+            mkt: 'etfs',
+            ord: 3,
+            reg: 'row',
+            sprd: 0.12,
+            sym: 'MSCI Emerging Markets (EEM)',
+        },
+        GDX_US: {
+            ask: 29.73,
+            bid: 29.62,
+            chng: '0%',
+            code: 'GDX_US',
+            mid: 29.67,
+            mkt: 'etfs',
+            ord: 2,
+            reg: 'row',
+            sprd: 0.11,
+            sym: 'Gold Miners (GDX)',
+        },
+        SPY_US: {
+            ask: 460.5,
+            bid: 460.25,
+            chng: '0%',
+            code: 'SPY_US',
+            mid: 460.37,
+            mkt: 'etfs',
+            ord: 1,
+            reg: 'row',
+            sprd: 0.25,
+            sym: 'SPDR S&P 500 (SPY)',
+        },
+        UNG_US: {
+            ask: 5.11,
+            bid: 5,
+            chng: '0%',
+            code: 'UNG_US',
+            mid: 5.05,
+            mkt: 'etfs',
+            ord: 4,
+            reg: 'row',
+            sprd: 0.11,
+            sym: 'US Natural Gas (UNG)',
+        },
+        XLK_US: {
+            ask: 186.78,
+            bid: 186.63,
+            chng: '0%',
+            code: 'XLK_US',
+            mid: 186.7,
+            mkt: 'etfs',
+            ord: 5,
+            reg: 'row',
+            sprd: 0.15,
+            sym: 'Tech Select Sector SPDR (XLK)',
+        },
+    },
+    fx: {
+        AUDUSD: {
+            ask: 0.65586,
+            bid: 0.65581,
+            chng: '-0.32%',
+            code: 'AUDUSD',
+            mid: 0.65583,
+            mkt: 'forex',
+            ord: 4,
+            reg: 'row',
+            sprd: 0.00004,
+            sym: 'AUD/USD',
+        },
+        EURUSD: {
+            ask: 1.07669,
+            bid: 1.07664,
+            chng: '0%',
+            code: 'EURUSD',
+            mid: 1.07666,
+            mkt: 'forex',
+            ord: 1,
+            reg: 'row',
+            sprd: 0.00005,
+            sym: 'EUR/USD',
+        },
+        GBPJPY: {
+            ask: 182.582,
+            bid: 182.565,
+            chng: '0%',
+            code: 'GBPJPY',
+            mid: 182.573,
+            mkt: 'forex',
+            ord: 3,
+            reg: 'row',
+            sprd: 0.016,
+            sym: 'GBP/JPY',
+        },
+        GBPUSD: {
+            ask: 1.25414,
+            bid: 1.25409,
+            chng: '0%',
+            code: 'GBPUSD',
+            mid: 1.25411,
+            mkt: 'forex',
+            ord: 2,
+            reg: 'row',
+            sprd: 0.00005,
+            sym: 'GBP/USD',
+        },
+        USDCAD: {
+            ask: 1.35975,
+            bid: 1.35963,
+            chng: '0%',
+            code: 'USDCAD',
+            mid: 1.35969,
+            mkt: 'forex',
+            ord: 5,
+            reg: 'row',
+            sprd: 0.00012,
+            sym: 'USD/CAD',
+        },
+    },
+    ind: {
+        US_100: {
+            ask: 16050.23,
+            bid: 16048.77,
+            chng: '0%',
+            code: 'US_100',
+            mid: 16049.5,
+            mkt: 'indices',
+            ord: 5,
+            reg: 'row',
+            sprd: 1.46,
+            sym: 'US Tech 100',
+        },
+        US_30: {
+            ask: 36302.65,
+            bid: 36299.15,
+            chng: '0%',
+            code: 'US_30',
+            mid: 36300.9,
+            mkt: 'indices',
+            ord: 4,
+            reg: 'row',
+            sprd: 3.5,
+            sym: 'Wall Street 30',
+        },
+    },
+    stk: {
+        AAPL: {
+            ask: 196.13,
+            bid: 195.54,
+            chng: '+0.86%',
+            code: 'AAPL',
+            mid: 195.83,
+            mkt: 'stocks',
+            ord: 1,
+            reg: 'row',
+            sprd: 0.59,
+            sym: 'Apple (APPL)',
+        },
+        DIS: {
+            ask: 93.14,
+            bid: 92.51,
+            chng: '+0.56%',
+            code: 'DIS',
+            mid: 92.82,
+            mkt: 'stocks',
+            ord: 2,
+            reg: 'row',
+            sprd: 0.64,
+            sym: 'Walt Disney Co (DIS)',
+        },
+        TSLA: {
+            ask: 244.25,
+            bid: 243.13,
+            chng: '0%',
+            code: 'TSLA',
+            mid: 243.69,
+            mkt: 'stocks',
+            ord: 3,
+            reg: 'row',
+            sprd: 1.13,
+            sym: 'Tesla (TSLA)',
+        },
+    },
+}
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\start-trading-steps\data.tsx =====
+import React from 'react'
+import { StaticImage } from 'gatsby-plugin-image'
+import { CardContent } from '@deriv-com/components'
+import { Localize, localize } from 'components/localization'
+
+export const RowCards: CardContent[] = [
+    {
+        id: 1,
+        header: <Localize translate_text="_t_1. Sign up and explore_t_" />,
+        description: (
+            <Localize translate_text="_t_Sign up in minutes and explore Traderâ€™s Hub â€” all your trading needs, in one place._t_" />
+        ),
+        content: (
+            <StaticImage
+                src="../../../../images/migration/home/steps1.png"
+                alt={localize('_t_Sign up and explore_t_')}
+                loading="lazy"
+                formats={['webp', 'auto']}
+                quality={100}
+            />
+        ),
+        color: 'gray',
+        align: 'center',
+        size: 'md',
+        contentClassName: 'px-general-lg pt-general-lg',
+        nonContentClassName: '[&>*:nth-child(1)]:!flex-1 !max-h-none',
+    },
+    {
+        id: 2,
+        header: <Localize translate_text="_t_2. Try with zero-risk_t_" />,
+        description: (
+            <Localize translate_text="_t_Try any trade, on any platform with a zero-risk, demo trading account._t_" />
+        ),
+        content: (
+            <StaticImage
+                src="../../../../images/migration/home/steps2.png"
+                alt={localize('_t_Try with zero-risk_t_')}
+                loading="lazy"
+                formats={['webp', 'auto']}
+                quality={100}
+            />
+        ),
+        color: 'gray',
+        align: 'center',
+        size: 'md',
+        contentClassName: 'px-general-lg pt-general-lg',
+        nonContentClassName: '[&>*:nth-child(1)]:!flex-1 !max-h-none',
+    },
+    {
+        id: 3,
+        header: <Localize translate_text="_t_3. Trade with confidence_t_" />,
+        description: (
+            <Localize translate_text="_t_Fund your account and start trading with round-the-clock support._t_" />
+        ),
+        content: (
+            <StaticImage
+                src="../../../../images/migration/home/steps3.png"
+                alt={localize('_t_Trade with confidence_t_')}
+                loading="lazy"
+                formats={['webp', 'auto']}
+                quality={100}
+            />
+        ),
+        color: 'gray',
+        align: 'center',
+        size: 'md',
+        contentClassName: 'px-general-lg pt-general-lg',
+        nonContentClassName: '[&>*:nth-child(1)]:!flex-1 !max-h-none',
+    },
+]
+
+export const EUCards: CardContent[] = [
+    {
+        id: 1,
+        header: <Localize translate_text="_t_1. Sign up and explore_t_" />,
+        description: (
+            <Localize translate_text="_t_Sign up in minutes and explore Traderâ€™s Hub â€” all your trading needs, in one place._t_" />
+        ),
+        content: (
+            <StaticImage
+                src="../../../../images/migration/home/steps1_eu.png"
+                alt={localize('_t_Sign up and explore_t_')}
+                loading="lazy"
+                formats={['webp', 'auto']}
+                quality={100}
+            />
+        ),
+        color: 'gray',
+        align: 'center',
+        size: 'md',
+        contentClassName: 'px-general-lg pt-general-lg',
+        nonContentClassName: '[&>*:nth-child(1)]:!flex-1 !max-h-none',
+    },
+    {
+        id: 2,
+        header: <Localize translate_text="_t_2. Try with zero-risk_t_" />,
+        description: (
+            <Localize translate_text="_t_Try any trade, on any platform with a zero-risk, demo trading account._t_" />
+        ),
+        content: (
+            <StaticImage
+                src="../../../../images/migration/home/steps2_eu.png"
+                alt={localize('_t_Try with zero-risk_t_')}
+                loading="lazy"
+                formats={['webp', 'auto']}
+                quality={100}
+            />
+        ),
+        color: 'gray',
+        align: 'center',
+        size: 'md',
+        contentClassName: 'px-general-lg pt-general-lg',
+        nonContentClassName: '[&>*:nth-child(1)]:!flex-1 !max-h-none',
+    },
+    {
+        id: 3,
+        header: <Localize translate_text="_t_3. Trade with confidence_t_" />,
+        description: (
+            <Localize translate_text="_t_Fund your account and start trading with round-the-clock support._t_" />
+        ),
+        content: (
+            <StaticImage
+                src="../../../../images/migration/home/steps3_eu.png"
+                alt={localize('_t_Trade with confidence_t_')}
+                loading="lazy"
+                formats={['webp', 'auto']}
+                quality={100}
+            />
+        ),
+        color: 'gray',
+        align: 'center',
+        size: 'md',
+        contentClassName: 'px-general-lg pt-general-lg',
+        nonContentClassName: '[&>*:nth-child(1)]:!flex-1 !max-h-none',
+    },
+]
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\start-trading-steps\index.tsx =====
+import React from 'react'
+import { Features } from '@deriv-com/blocks'
+import { EUCards, RowCards } from './data'
+import { Localize } from 'components/localization'
+import TradersHubCtaButton from 'features/components/molecules/traders-hub-cta-button'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const StartTradingSteps = () => {
+    const {region} = useBuildVariant()
+
+    return (
+        <Features.Card
+            hasPadding
+            className="xl:[&>*:nth-child(1)]:!px-50"
+            title={<Localize translate_text="_t_Start trading in 3 simple steps_t_" />}
+            cta={
+                <div className="hidden lg:block">
+                    <TradersHubCtaButton className="flex" />
+                </div>
+            }
+            cols="three"
+            variant="ContentTop"
+            cards={region === "eu" ? EUCards : RowCards}
+        />
+    )
+}
+export default StartTradingSteps
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\stats\index.tsx =====
+import React from 'react'
+import { StatBlock } from '@deriv-com/blocks'
+import { Localize } from 'components/localization'
+
+const cards = [
+    {
+        id: 1,
+        title: <Localize translate_text="_t_2.5M+_t_" />,
+        description: <Localize translate_text="_t_Users worldwide_t_" />,
+    },
+    {
+        id: 2,
+        title: <Localize translate_text="_t_$650B+_t_" />,
+        description: <Localize translate_text="_t_Monthly volume_t_" />,
+    },
+    {
+        id: 3,
+        title: <Localize translate_text="_t_1999_t_" />,
+        description: <Localize translate_text="_t_Established since_t_" />,
+    },
+    {
+        id: 4,
+        title: <Localize translate_text="_t_168M+_t_" />,
+        description: <Localize translate_text="_t_Monthly deals_t_" />,
+    },
+]
+
+const StatSection = () => {
+    return <StatBlock.V3 items={cards} className="bg-solid-slate-75" />
+}
+
+export default StatSection
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\trade-type\data.tsx =====
+import React from 'react'
+import { CardContent } from '@deriv-com/components'
+import cfdsLg from "../../../../images/svg/new-homepage/cfds-lg.svg"
+import optionsLg from "../../../../images/svg/new-homepage/options-lg.svg"
+import multipliersLg from "../../../../images/svg/new-homepage/multipliers-lg.svg"
+import { Localize } from 'components/localization'
+
+export const RowCards: CardContent[] = [
+    {
+        id: 1,
+        header: <Localize translate_text="_t_CFDs_t_" />,
+        description: (
+            <Localize translate_text="_t_Trade with leverage, unbeatable spreads, and fast execution on the widest range of markets._t_" />
+        ),
+        icon: (
+            <img src={cfdsLg} alt="cfd" width={48} height={48} loading="lazy" />
+        ),
+        align: 'start',
+        color: 'light',
+        size: 'md',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/trade-types/cfds/',
+            descriptiveText: 'about CFDs',
+        },
+    },
+    {
+        id: 2,
+        header: <Localize translate_text="_t_Options_t_" />,
+        description: (
+            <Localize translate_text="_t_Trade diverse vanilla and exotic options across platforms and markets without risking more than your initial stake._t_" />
+        ),
+        icon: (
+            <img
+                src={optionsLg}
+                alt="options"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        align: 'start',
+        color: 'light',
+        size: 'md',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/trade-types/options/digital-options/up-and-down/',
+            descriptiveText: 'about options',
+        },
+    },
+    {
+        id: 3,
+        header: <Localize translate_text="_t_Multipliers_t_" />,
+        description: (
+            <Localize translate_text="_t_Trade on global financial markets and multiply your potential profit without losing more than your stake._t_" />
+        ),
+        icon: (
+            <img
+                src={multipliersLg}
+                alt="multipliers"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        align: 'start',
+        color: 'light',
+        size: 'md',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/trade-types/multiplier/',
+            descriptiveText: 'about multiplier',
+        },
+    },
+]
+
+export const EUCards: CardContent[] = [
+    {
+        id: 1,
+        header: <Localize translate_text="_t_CFDs_t_" />,
+        description: (
+            <Localize translate_text="_t_Trade with leverage, unbeatable spreads, and fast execution on the widest range of markets._t_" />
+        ),
+        icon: (
+            <img src={cfdsLg} alt="cfds" width={48} height={48} loading="lazy" />
+        ),
+        align: 'start',
+        color: 'light',
+        size: 'md',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/trade-types/cfds/',
+            descriptiveText: 'about CFDs',
+        },
+    },
+    {
+        id: 2,
+        header: <Localize translate_text="_t_Multipliers_t_" />,
+        description: (
+            <Localize translate_text="_t_Trade on global financial markets and multiply your potential profit without losing more than your stake._t_" />
+        ),
+        icon: (
+            <img
+                src={multipliersLg}
+                alt="multipliers"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        align: 'start',
+        color: 'light',
+        size: 'md',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/trade-types/multiplier/',
+            descriptiveText: 'about multipliers',
+        },
+    },
+]
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\trade-type\index.tsx =====
+import React from 'react'
+import { Features } from '@deriv-com/blocks'
+import { EUCards, RowCards } from './data'
+import { Localize } from 'components/localization'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const TradeTypeSection = () => {
+    const { region } = useBuildVariant()
+    const heading =
+        region === 'eu' ? (
+            <Localize translate_text="_t_Trade CFDs and multipliers_t_" />
+        ) : (
+            <Localize translate_text="_t_Trade CFDs, options, and multipliers_t_" />
+        )
+        
+    return (
+        <Features.Card
+            hasPadding
+            title={heading}
+            cols="three"
+            cards={region === 'eu' ? EUCards : RowCards}
+            className="!bg-background-secondary-container"
+        />
+    )
+}
+
+export default TradeTypeSection
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\user-platfroms\data.tsx =====
+import React from 'react'
+import { CardContent } from '@deriv-com/components'
+import dmt5 from "../../../../images/svg/new-homepage/dmt5.svg"
+import dct from "../../../../images/svg/new-homepage/dct.svg"
+import dx from "../../../../images/svg/new-homepage/dx.svg"
+import dgo from "../../../../images/svg/new-homepage/dgo.svg"
+import dt from "../../../../images/svg/new-homepage/dt.svg"
+import dbot from "../../../../images/svg/new-homepage/dbot.svg"
+import { FilterKeyType, PlatformTab } from './type'
+import { Localize } from 'components/localization'
+
+export const platformTabs: PlatformTab[] = [
+    { content: <Localize translate_text="_t_All_t_" />, tabId: 'All' },
+    { content: <Localize translate_text="_t_CFDs_t_" />, tabId: 'CFDs' },
+    { content: <Localize translate_text="_t_Options_t_" />, tabId: 'Options' },
+    { content: <Localize translate_text="_t_Bots_t_" />, tabId: 'Bots' },
+    { content: <Localize translate_text="_t_Social_t_" />, tabId: 'Social' },
+]
+
+type PlatformCardContent = CardContent & {
+    filterKey: FilterKeyType[]
+}
+
+export const RowCards: PlatformCardContent[] = [
+    {
+        id: 1,
+        filterKey: ['CFDs'],
+        header: 'Deriv MT5',
+        description: (
+            <Localize translate_text="_t_The most popular and comprehensive CFDs platform._t_" />
+        ),
+        icon: (
+            <img
+                src={dmt5}
+                alt="deriv mt5"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/dmt5',
+            descriptiveText: 'About Deriv MT5',
+        },
+    },
+    {
+        id: 2,
+        filterKey: ['CFDs', 'Social'],
+        header: <Localize translate_text="_t_Deriv cTrader_t_" />,
+        description: (
+            <Localize translate_text="_t_Fast CFDs platform with inbuilt copy trading._t_" />
+        ),
+        icon: (
+            <img
+                src={dct}
+                alt="deriv ctrader"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/deriv-ctrader',
+            descriptiveText: 'About Deriv cTrader',
+        },
+    },
+    {
+        id: 3,
+        filterKey: ['CFDs'],
+        header: <Localize translate_text="_t_Deriv X_t_" />,
+        description: (
+            <Localize translate_text="_t_User-friendly and customisable CFDs platform._t_" />
+        ),
+        icon: (
+            <img src={dx} alt="deriv x" width={48} height={48} loading="lazy" />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/derivx',
+            descriptiveText: 'About Deriv X',
+        },
+    },
+    {
+        id: 4,
+        filterKey: ['Options'],
+        header: 'Deriv GO',
+        description: (
+            <Localize translate_text="_t_Mobile app for multipliers trading on the go._t_" />
+        ),
+        icon: (
+            <img src={dgo} alt="deriv go" width={48} height={48} loading="lazy" />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/deriv-go',
+            descriptiveText: 'About Deriv GO',
+        },
+    },
+    {
+        id: 5,
+        filterKey: ['Options'],
+        header: <Localize translate_text="_t_Deriv Trader_t_" />,
+        description: (
+            <Localize translate_text="_t_Flagship options, accumulators, and multipliers trading platform._t_" />
+        ),
+        icon: (
+            <img
+                src={dt}
+                alt="deriv trader"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/dtrader',
+            descriptiveText: 'About Deriv Trader',
+        },
+    },
+    {
+        id: 6,
+        filterKey: ['Options', 'Bots'],
+        header: <Localize translate_text="_t_Deriv Bot_t_" />,
+        description: <Localize translate_text="_t_Automated trading. No coding required._t_" />,
+        icon: (
+            <img
+                src={dbot}
+                alt="deriv bot"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/dbot',
+            descriptiveText: 'About Deriv Bot',
+        },
+    },
+]
+
+export const EUCards: CardContent[] = [
+    {
+        id: 1,
+        header: 'Deriv MT5',
+        description: (
+            <Localize
+                translate_text="_t_The most popular and comprehensive <0>CFDs</0> platform._t_"
+                components={[<strong key={0} />]}
+            />
+        ),
+        icon: (
+            <img
+                src={dmt5}
+                alt="deriv mt5"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/dmt5',
+            descriptiveText: 'About Deriv MT5',
+        },
+    },
+    {
+        id: 2,
+        header: <Localize translate_text="_t_Deriv Trader_t_" />,
+        description: (
+            <Localize
+                translate_text="_t_Flagship trading platform for <0>multipliers</0>._t_"
+                components={[<strong key={0} />]}
+            />
+        ),
+        icon: (
+            <img
+                src={dt}
+                alt="deriv trader"
+                width={48}
+                height={48}
+                loading="lazy"
+            />
+        ),
+        size: 'md',
+        align: 'start',
+        color: 'light',
+        link: {
+            content: <Localize translate_text="_t_Learn more_t_" />,
+            href: '/dtrader',
+            descriptiveText: 'About Deriv Trader',
+        },
+    },
+]
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\user-platfroms\index.tsx =====
+import React from 'react'
+import { PlatformBlock } from '@deriv-com/blocks'
+import { CardsContainer } from '@deriv-com/components'
+import { RowCards, platformTabs, EUCards } from './data'
+import { FilterKeyType } from './type'
+import { Localize } from 'components/localization'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const getTabContent = (tabId: FilterKeyType) => {
+    if (tabId === 'All') {
+        return RowCards
+    } else {
+        return RowCards.filter((card) => card.filterKey.includes(tabId))
+    }
+}
+
+const tabs = platformTabs.map(({ content }) => ({ content }))
+
+const UserFriendlyPlatforms = () => {
+    const { region } = useBuildVariant()
+
+    if (region === 'eu') {
+        return (
+            <PlatformBlock.Card
+                className="bg-background-primary-base"
+                header={
+                    <Localize translate_text="_t_User-friendly trading platforms, on any device_t_" />
+                }
+                variant="ContentBottom"
+                cols="three"
+                cards={EUCards}
+            />
+        )
+    }
+    if (region == 'row') {
+        return (
+            <PlatformBlock.Tab
+                className="bg-background-primary-base"
+                tabId="platformtab"
+                header={
+                    <Localize translate_text="_t_User-friendly trading platforms, on any device_t_" />
+                }
+                tabs={tabs}
+            >
+                {platformTabs.map((item, i) => (
+                    <CardsContainer
+                        variant="ContentBottom"
+                        cards={getTabContent(item.tabId)}
+                        cols="three"
+                        key={i}
+                    />
+                ))}
+            </PlatformBlock.Tab>
+        )
+    }
+}
+
+export default UserFriendlyPlatforms
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\user-platfroms\type.ts =====
+export type MakeWritable<T> = {
+    -readonly [K in keyof T]: T[K]
+}
+
+export type PlatformTab = {
+    content: React.ReactNode
+    tabId: 'All' | 'CFDs' | 'Options' | 'Bots' | 'Social'
+}
+
+export type FilterKeyType = Omit<PlatformTab['tabId'], 'All'>
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\years\data.tsx =====
+import React from 'react'
+import { CardContent } from '@deriv-com/components'
+import LightDependableIcon from "../../../../images/svg/new-homepage/LightDependableIcon.svg"
+import LightSafeAndSecureIcon from "../../../../images/svg/new-homepage/LightSafeAndSecureIcon.svg"
+import LightRegulatedIcon from "../../../../images/svg/new-homepage/LightRegulatedIcon.svg"
+import LightTwentyFourSevenSupportIcon from "../../../../images/svg/new-homepage/LightTwentyFourSevenSupportIcon.svg"
+import { Localize } from 'components/localization'
+
+export const cards: CardContent[] = [
+    {
+        id: 1,
+        header: <Localize translate_text="_t_Dependable_t_" />,
+        description: (
+            <Localize translate_text="_t_Our 99.97% uptime ensures your uninterrupted access to the markets._t_" />
+        ),
+        size: 'md',
+        color: 'gray',
+        align: 'center',
+        icon: (
+            <img
+                src={LightDependableIcon}
+                width={120}
+                height={145}
+                alt="Dependable platform"
+                loading="lazy"
+            />
+        ),
+        className: 'h-full',
+    },
+    {
+        id: 2,
+        header: <Localize translate_text="_t_Safe and secure_t_" />,
+        description: <Localize translate_text="_t_We keep your personal data and funds safe._t_" />,
+        size: 'md',
+        color: 'gray',
+        align: 'center',
+        icon: (
+            <img
+                src={LightSafeAndSecureIcon}
+                width={120}
+                height={145}
+                alt="Safe and secure platform"
+                loading="lazy"
+            />
+        ),
+        className: 'h-full',
+    },
+    {
+        id: 3,
+        header: <Localize translate_text="_t_Regulated_t_" />,
+        description: (
+            <Localize translate_text="_t_Weâ€™re regulated and licensed by global financial authorities._t_" />
+        ),
+        size: 'md',
+        color: 'gray',
+        align: 'center',
+        icon: (
+            <img
+                src={LightRegulatedIcon}
+                width={120}
+                height={145}
+                alt="Regulated and licenced broker"
+                loading="lazy"
+            />
+        ),
+        className: 'h-full',
+    },
+    {
+        id: 4,
+        header: <Localize translate_text="_t_24/7 support_t_" />,
+        description: (
+            <Localize translate_text="_t_Our professional multilingual team is here for you anytime._t_" />
+        ),
+        size: 'md',
+        color: 'gray',
+        align: 'center',
+        icon: (
+            <img
+                src={LightTwentyFourSevenSupportIcon}
+                width={120}
+                height={145}
+                alt="24-hour chat support"
+                loading="lazy"
+            />
+        ),
+        className: 'h-full',
+    },
+]
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\features\pages\home\years\index.tsx =====
+import React from 'react'
+import { Features } from '@deriv-com/blocks'
+import { swiperOption } from '../live-pricing-migration/utils'
+import { cards } from './data'
+import { Localize, is_rtl } from 'components/localization'
+
+const TwentyYearsStrong = () => {
+    return (
+        <Features.ContentSlider
+            title={<Localize translate_text="_t_We're 25 years strong_t_" />}
+            cardSliderProps={{
+                swiperData: swiperOption,
+                slideClasses: 'max-w-[296px] !h-auto !mr-gap-none !ml-gap-none',
+                className: 'w-screen lg:w-full [&>*:nth-child(1)]:!gap-gap-lg ',
+                variant: 'ContentBottom',
+                cards: cards,
+                dir: is_rtl() ? 'rtl' : 'ltr',
+            }}
+        />
+    )
+}
+
+export default TwentyYearsStrong

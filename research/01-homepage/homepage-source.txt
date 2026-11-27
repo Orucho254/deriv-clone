@@ -1,0 +1,1406 @@
+﻿
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_data.tsx =====
+import React from 'react'
+import { StaticImage } from 'gatsby-plugin-image'
+import { TContent, THeaderItem } from './_types'
+import { localize } from 'components/localization'
+
+export const header_items: THeaderItem[] = [
+    { id: 0, text: '_t_Simple._t_' },
+    { id: 1, text: '_t_Flexible._t_' },
+    { id: 2, text: '_t_Reliable._t_' },
+]
+
+export const contents: TContent[] = [
+    { id: 0, text: '_t_Tight spreads_t_' },
+    { id: 1, text: '_t_Sharp prices_t_' },
+    { id: 2, text: '_t_24x7 trading_t_' },
+    { id: 3, text: '_t_100+ tradeable assets_t_' },
+    { id: 4, text: '_t_20+ years of experience_t_' },
+]
+
+export const contents_ppc: TContent[] = [
+    { id: 3, text: '_t_Tight spreads_t_' },
+    { id: 2, text: '_t_Sharp prices_t_' },
+    { id: 1, text: '_t_100+ tradeable assets_t_' },
+    { id: 0, text: '_t_20+ years of experience_t_' },
+]
+
+export const row_images = [
+    {
+        key: 'hero1',
+        image: (
+            <StaticImage
+                src="../../images/common/home/hero_platform1.png"
+                alt={localize('_t_mobile app deriv go_t_')}
+                formats={['avif', 'webp', 'auto']}
+                quality={36}
+                loading="eager"
+                placeholder="none"
+            />
+        ),
+    },
+    {
+        key: 'hero2',
+        image: (
+            <StaticImage
+                src="../../images/common/home/hero_platform2.png"
+                alt={localize('_t_laptop dtrader_t_')}
+                formats={['avif', 'webp', 'auto']}
+                quality={44}
+                placeholder="none"
+            />
+        ),
+    },
+    {
+        key: 'hero3',
+        image: (
+            <StaticImage
+                src="../../images/common/home/hero_platform3.png"
+                alt={localize('_t_laptop mt5_t_')}
+                formats={['avif', 'webp', 'auto']}
+                quality={38}
+                placeholder="none"
+            />
+        ),
+    },
+    {
+        key: 'hero4',
+        image: (
+            <StaticImage
+                src="../../images/common/home/hero_platform4.png"
+                alt={localize('_t_laptop deriv x_t_')}
+                formats={['avif', 'webp', 'auto']}
+                quality={44}
+                placeholder="none"
+            />
+        ),
+    },
+]
+
+export const eu_images = [
+    {
+        key: 'hero1_eu',
+        image: (
+            <StaticImage
+                src="../../images/common/home/hero_platform1_eu.png"
+                alt={localize('_t_laptop dtrader eu_t_')}
+                formats={['avif', 'webp', 'auto']}
+                quality={44}
+                loading="eager"
+                placeholder="none"
+            />
+        ),
+    },
+    {
+        key: 'hero2_eu',
+        image: (
+            <StaticImage
+                src="../../images/common/home/hero_platform2_eu.png"
+                alt={localize('_t_laptop dmt5 eu_t_')}
+                formats={['avif', 'webp', 'auto']}
+                quality={38}
+                placeholder="none"
+            />
+        ),
+    },
+]
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_hero.tsx =====
+import React from 'react'
+import styled from 'styled-components'
+import { StaticImage } from 'gatsby-plugin-image'
+import VerticalCarousel from './_vertical-carousel'
+import PlatformSlideshow from './_platform-slideshow'
+import { contents, contents_ppc, header_items } from './_data'
+import useAuthCheck from 'components/hooks/use-auth-check'
+import device from 'themes/device'
+import { Button } from 'components/form'
+import { Container, Box, Flex } from 'components/containers'
+import { Header } from 'components/elements'
+import useRegion from 'components/hooks/use-region'
+import { Localize, localize } from 'components/localization'
+import useHandleSignup from 'components/hooks/use-handle-signup'
+import { TString } from 'types/generics'
+import { handleGetTrading } from 'components/custom/utils'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+type HeroProps = {
+    is_ppc?: boolean
+}
+
+const HeroWrapper = styled.section`
+    position: relative;
+    width: 100%;
+    padding: calc(7rem + 80px) 0;
+    min-height: 915px;
+    background: linear-gradient(241.35deg, #122434 12.86%, #060c11 85.61%, #060c11 85.61%);
+    @media ${device.tabletL} {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        padding: calc(7rem + 40px) 0 46px;
+        min-height: 846px;
+    }
+`
+const HeroButton = styled(Button)`
+    padding: 17px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+
+    @media ${device.tabletL} {
+        width: 100%;
+        font-size: 14px;
+        padding: 14px 16px;
+    }
+    @media ${device.mobileS} {
+        font-size: 18px;
+        padding: 12px 20px;
+    }
+`
+const StyledHeader = styled(Header)`
+    @media ${device.tabletL} {
+        margin-right: 8px;
+        width: unset;
+    }
+`
+
+const HeroHeader = ({ text }: { text: TString }) => {
+    return (
+        <StyledHeader type="main-landing-title" color="white">
+            <Localize translate_text={text} />
+        </StyledHeader>
+    )
+}
+
+const Hero = ({ is_ppc }: HeroProps) => {
+    const { region } = useBuildVariant()
+    const { is_region_loading } = useRegion()
+    const [is_logged_in, is_auth_checked] = useAuthCheck()
+    const handleSignup = useHandleSignup()
+
+    return (
+        <HeroWrapper>
+            <Flex
+                height="100%"
+                position="absolute"
+                ai="center"
+                top="0"
+                tablet={{ ai: 'flex-end', pb: '20rem' }}
+            >
+                <Box>
+                    <StaticImage
+                        src="../../images/common/home/hero_bg.png"
+                        alt={localize('_t_world map_t_')}
+                        loading="eager"
+                        formats={['avif', 'webp', 'auto']}
+                        quality={26}
+                        objectFit="contain"
+                        placeholder="none"
+                    />
+                </Box>
+            </Flex>
+            <Container fd="column" ai="flex-start">
+                <Flex
+                    m="0 auto"
+                    tabletL={{
+                        fd: 'column',
+                        max_width: '100%',
+                    }}
+                >
+                    <Flex
+                        max_width="486px"
+                        fd="column"
+                        jc="flex-start"
+                        bp1060={{ max_height: 'unset' }}
+                        tabletL={{
+                            width: 'unset',
+                            max_width: '100%',
+                            mr: 'unset',
+                            mb: '40px',
+                        }}
+                        z_index="2"
+                    >
+                        <Flex
+                            height="unset"
+                            mb="16px"
+                            direction="column"
+                            tabletL={{
+                                fd: 'row',
+                                fw: 'wrap',
+                                jc: 'flex-start',
+                                mb: '8px',
+                                max_width: '100%',
+                            }}
+                        >
+                            {header_items.map((item) => (
+                                <HeroHeader key={item.id} text={item.text} />
+                            ))}
+                        </Flex>
+                        <Header
+                            as="h2"
+                            type="sub-section-title"
+                            color="white"
+                            min_height="auto"
+                            weight="normal"
+                        >
+                            {region === "eu" && (
+                                <Localize translate_text="_t_Trade forex, stocks & indices, cryptocurrencies, commodities, and derived._t_" />
+                            )}
+                            {region !== "eu" && (
+                                <Localize translate_text="_t_Trade forex, stocks & indices, cryptocurrencies, commodities, and derived._t_" />
+                            )}
+                        </Header>
+                        <VerticalCarousel contents={is_ppc ? contents_ppc : contents} />
+                        <Box tabletL={{ mt: '-8px' }}>
+                            {is_auth_checked &&
+                                (is_logged_in ? (
+                                    <HeroButton
+                                        onClick={handleGetTrading}
+                                        id="dm-hero-signup"
+                                        secondary
+                                    >
+                                        <Localize translate_text="_t_Get Trading_t_" />
+                                    </HeroButton>
+                                ) : (
+                                    <HeroButton
+                                        disabled={is_region_loading}
+                                        onClick={handleSignup}
+                                        id="dm-hero-signup"
+                                        secondary
+                                    >
+                                        <Localize translate_text="_t_Create free demo account_t_" />
+                                    </HeroButton>
+                                ))}
+                        </Box>
+                    </Flex>
+                    <PlatformSlideshow />
+                </Flex>
+            </Container>
+        </HeroWrapper>
+    )
+}
+
+export default Hero
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_lazy-load.tsx =====
+import Loadable from '@loadable/component'
+
+export const Markets = Loadable(() => import(/* webpackChunkName: "markets" */ './_markets'))
+export const WhatOurClientsSay = Loadable(
+    () => import(/* webpackChunkName: "what-our-clients-say" */ './_what-our-clients-say'),
+)
+export const SimpleSteps = Loadable(
+    () => import(/* webpackChunkName: "simple-steps" */ 'components/custom/_simple-steps'),
+)
+export const Signup = Loadable(
+    () => import(/* webpackChunkName: "signup" */ 'components/custom/signup'),
+)
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_markets.tsx =====
+import React from 'react'
+import styled from 'styled-components'
+import { Header, Text, LocalizedLinkText } from 'components/elements'
+import { localize, Localize } from 'components/localization'
+import { Container, SectionContainer, Flex } from 'components/containers'
+import device from 'themes/device'
+// Icons
+import CommoditiesIcon from 'images/svg/markets/commodities.svg'
+import ForexIcon from 'images/svg/markets/forex.svg'
+import StockIcon from 'images/svg/markets/stock.svg'
+import SyntheticIndicesIcon from 'images/svg/markets/synthetic.svg'
+
+const StyledSection = styled(SectionContainer)`
+    box-shadow: inset 0 1px 0 0 var(--color-grey-8);
+    padding: 8rem 0 6rem;
+
+    @media ${device.tabletL} {
+        padding: 5rem 0;
+    }
+`
+const MarketWrapper = styled(Flex)`
+    margin-top: 4rem;
+
+    @media ${device.tabletL} {
+        article:last-child {
+            margin-bottom: 0;
+        }
+    }
+`
+const MarketCard = styled.article<{ mb?: string; mr?: string }>`
+    display: flex;
+    margin-bottom: ${({ mb }) => mb};
+    margin-right: ${({ mr }) => mr};
+
+    svg {
+        margin-right: 2rem;
+    }
+    img {
+        margin-right: 2rem;
+    }
+    div {
+        max-width: 40rem;
+
+        ${Text} {
+            padding-top: 8px;
+        }
+    }
+    @media (max-width: 1210px) {
+        margin-right: 0;
+    }
+    @media ${device.tabletL} {
+        flex-direction: column;
+
+        svg {
+            width: 6rem;
+            height: 6rem;
+            margin-bottom: 1rem;
+        }
+        img {
+            width: 6rem;
+            height: 6rem;
+            margin-bottom: 1rem;
+        }
+    }
+    @media (max-width: 860px) {
+        margin-bottom: 4rem;
+    }
+`
+const MarketLink = styled(LocalizedLinkText)`
+    display: block;
+    margin-top: 0.8rem;
+`
+
+type MarketsProps = {
+    is_ppc: boolean
+}
+
+const Markets = ({ is_ppc }: MarketsProps) => {
+    return (
+        <StyledSection>
+            <Container direction="column">
+                <Header align="center" as="h3" type="section-title">
+                    <Localize translate_text="_t_Markets_t_" />
+                </Header>
+                <MarketWrapper wrap="wrap">
+                    <MarketCard mr="2.4rem" mb="4rem">
+                        <img src={ForexIcon} alt={localize('_t_Forex_t_')} width="64" height="64" />
+                        <div>
+                            <Header as="h4" type="sub-section-title">
+                                <Localize translate_text="_t_Forex_t_" />
+                            </Header>
+                            <Text>
+                                <Localize translate_text="_t_Take part in the worldâ€™s largest financial market where more than $5 trillion worth of currencies are bought and sold each day._t_" />
+                            </Text>
+                            <Localize
+                                translate_text="_t_<0>Learn more</0>_t_"
+                                components={[
+                                    <MarketLink key={0} to="/markets/forex/" color="red" />,
+                                ]}
+                            />
+                        </div>
+                    </MarketCard>
+                    <MarketCard mb="4rem">
+                        <img
+                            src={StockIcon}
+                            alt={localize('_t_Stocks & indices_t_')}
+                            width="64"
+                            height="64"
+                        />
+                        <div>
+                            <Header as="h4" type="sub-section-title">
+                                <Localize translate_text="_t_Stocks & indices_t_" />
+                            </Header>
+                            <Text>
+                                <Localize translate_text="_t_Predict market trends and diversify your risk by trading the worldâ€™s top performing stocks & indices._t_" />
+                            </Text>
+                            <Localize
+                                translate_text="_t_<0>Learn more</0>_t_"
+                                components={[
+                                    <MarketLink key={0} to="/markets/stock/" color="red" />,
+                                ]}
+                            />
+                        </div>
+                    </MarketCard>
+                    {!is_ppc && (
+                        <MarketCard mr="2.4rem">
+                            <img
+                                src={SyntheticIndicesIcon}
+                                alt={localize('_t_Synthetic indices_t_')}
+                                width="64"
+                                height="64"
+                            />
+                            <div>
+                                <Header as="h4" type="sub-section-title">
+                                    <Localize translate_text="_t_Synthetic indices_t_" />
+                                </Header>
+                                <Text>
+                                    <Localize translate_text="_t_Enjoy synthetic markets that emulate the excitement of real-world markets without unpredictable real-world disruptions._t_" />
+                                </Text>
+                                <Localize
+                                    translate_text="_t_<0>Learn more</0>_t_"
+                                    components={[
+                                        <MarketLink key={0} to="/markets/synthetic/" color="red" />,
+                                    ]}
+                                />
+                            </div>
+                        </MarketCard>
+                    )}
+                    <MarketCard>
+                        <img
+                            src={CommoditiesIcon}
+                            alt={localize('_t_Commodities_t_')}
+                            width="64"
+                            height="64"
+                        />
+                        <div>
+                            <Header as="h4" type="sub-section-title">
+                                <Localize translate_text="_t_Commodities_t_" />
+                            </Header>
+                            <Text>
+                                <Localize translate_text="_t_Trade natural resources that are central to the worldâ€™s economy and profit from the opportunities created by the markets._t_" />
+                            </Text>
+                            <Localize
+                                translate_text="_t_<0>Learn more</0>_t_"
+                                components={[
+                                    <MarketLink key={0} to="/markets/commodities/" color="red" />,
+                                ]}
+                            />
+                        </div>
+                    </MarketCard>
+                </MarketWrapper>
+            </Container>
+        </StyledSection>
+    )
+}
+
+export default Markets
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_platform-slideshow.tsx =====
+import React, { useState, useEffect, useRef, ReactNode } from 'react'
+import styled from 'styled-components'
+import { eu_images, row_images } from './_data'
+import { Flex } from 'components/containers'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const ImageWrapper = styled.div<{ $is_hidden: boolean }>`
+    opacity: ${({ $is_hidden }) => ($is_hidden ? '0' : '1')};
+    display: ${({ $is_hidden }) => ($is_hidden ? 'none' : 'block')};
+    animation: fade 1s ease-in-out;
+
+    @keyframes fade {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+`
+
+const SlideContainer = styled(Flex)`
+    outline: none;
+    border: none;
+`
+
+const PlatformSlideshow = () => {
+    const { region } = useBuildVariant()
+    const [active_index, setActiveIndex] = useState(0)
+    const slide_images = region === "row" ? row_images : eu_images
+
+    const intervalRef = useRef(null)
+
+    useEffect(() => {
+        const setNextImage = () => {
+            setActiveIndex((prevIndex) =>
+                prevIndex >= slide_images?.length - 1 ? 0 : prevIndex + 1,
+            )
+        }
+
+        const slideshow_timer = setInterval(() => {
+            setNextImage()
+        }, 5000)
+
+        intervalRef.current = slideshow_timer
+
+        return () => clearInterval(intervalRef.current)
+    }, [slide_images])
+
+    return (
+        <SlideContainer
+            max_width="690px"
+            max_height="626px"
+            tablet={{ height: '360px', ai: 'center' }}
+            z_index="2"
+        >
+            <Slides images={slide_images} active_index={active_index} />
+        </SlideContainer>
+    )
+}
+
+type SlidesProps = {
+    images: Array<{ key: string; image: ReactNode }>
+    active_index: number
+}
+
+const Slides = ({ images, active_index }: SlidesProps) => {
+    return (
+        <>
+            {images?.map((slide, index) => {
+                const { key, image } = slide
+                return (
+                    <ImageWrapper
+                        key={`platform-slideshow__${key}`}
+                        $is_hidden={active_index !== index}
+                        style={{ height: '100%' }}
+                    >
+                        {image}
+                    </ImageWrapper>
+                )
+            })}
+        </>
+    )
+}
+
+export default PlatformSlideshow
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_testimonial-carousel.tsx =====
+import React, { Children, useState, useEffect, useRef, ReactNode } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
+import styled from 'styled-components'
+import { Flex } from 'components/containers'
+import ArrowLeft from 'images/svg/testimonials/arrow-left.svg'
+import ArrowRight from 'images/svg/testimonials/arrow-right.svg'
+import ArrowLeftFade from 'images/svg/testimonials/arrow-left-fade.svg'
+import ArrowRightFade from 'images/svg/testimonials/arrow-right-fade.svg'
+import device from 'themes/device'
+import { useIsRtl } from 'components/hooks/use-isrtl'
+
+const CarouselItem = styled(Flex)`
+    overflow: hidden;
+    transition: height 0.1s ease-in, opacity 0.05s ease-in;
+`
+
+const FlexiItem = styled(Flex)`
+    transition: opacity 0.4s ease-in;
+
+    /* 
+    class from a children passed to this component 
+    this class is essential to achieve the transition effect
+    */
+
+    .flexi-item {
+        margin-bottom: 40px;
+
+        @media ${device.tabletL} {
+            margin-bottom: 24px;
+        }
+    }
+`
+
+const Molder = styled(Flex)`
+    opacity: 0;
+`
+
+const Navigation = styled(Flex)`
+    @media ${device.tablet} {
+        position: relative;
+    }
+`
+
+const Arrows = styled.img`
+    width: 32px;
+    height: 32px;
+    transition: opacity 0.4s ease-in;
+    cursor: pointer;
+
+    @media ${device.tablet} {
+        &:nth-child(1) {
+            margin-right: 16px;
+        }
+        &:nth-child(2) {
+            margin-left: 16px;
+        }
+    }
+`
+
+const renderNavigations = (
+    count: number,
+    active: number,
+    setActive: Dispatch<SetStateAction<number>>,
+    animate: (action) => void,
+    is_rtl: boolean,
+) => {
+    const is_carousel = count > 1
+    const has_prev = active !== 0
+    const has_next = active < count - 1
+
+    const NextArrow = is_rtl
+        ? { normal: ArrowLeft, fade: ArrowLeftFade }
+        : { normal: ArrowRight, fade: ArrowRightFade }
+
+    const PrevArrow = is_rtl
+        ? { normal: ArrowRight, fade: ArrowRightFade }
+        : { normal: ArrowLeft, fade: ArrowLeftFade }
+
+    const validSlide = (n) => {
+        // values that are out of slide range will return it's respective boundaries
+        if (n >= count) {
+            return count - 1
+        }
+
+        if (n < 0) {
+            return 0
+        }
+
+        return n
+    }
+
+    const previous = () => {
+        if (has_prev) {
+            animate(() => {
+                setActive((current_active) => validSlide(current_active - 1))
+            })
+        }
+    }
+    const next = () => {
+        if (has_next) {
+            animate(() => {
+                setActive((current_active) => validSlide(current_active + 1))
+            })
+        }
+    }
+
+    if (is_carousel) {
+        return (
+            <Navigation
+                width="100%"
+                jc="space-between"
+                position="absolute"
+                height="fit-content"
+                tablet_jc="center"
+                tabletL={{
+                    mt: '50px',
+                }}
+            >
+                <Arrows
+                    src={has_prev ? PrevArrow.normal : PrevArrow.fade}
+                    onClick={previous}
+                    alt="previous arrow"
+                />
+                <Arrows
+                    src={has_next ? NextArrow.normal : NextArrow.fade}
+                    onClick={next}
+                    alt="next arrow"
+                />
+            </Navigation>
+        )
+    }
+
+    return <React.Fragment />
+}
+
+type TestimonialCarouselProps = {
+    children?: ReactNode
+    default_active?: number
+    height?: string
+}
+
+const TestimonialCarousel = ({
+    children,
+    default_active = 0,
+    height = 'fit-content',
+}: TestimonialCarouselProps) => {
+    const [active, setActive] = useState(default_active)
+    const children_array = Children.toArray(children)
+    const container_ref = useRef(null)
+    const molder_ref = useRef(null)
+    const flexible_ref = useRef(null)
+    const has_active = active !== null
+    const is_rtl = useIsRtl()
+
+    const animate = (action) => {
+        container_ref.current.style.opacity = 0
+
+        setTimeout(() => {
+            action()
+        }, 100)
+    }
+
+    const navigations = renderNavigations(children_array.length, active, setActive, animate, is_rtl)
+
+    useEffect(() => {
+        setActive(default_active)
+    }, [default_active])
+
+    useEffect(() => {
+        if (molder_ref) {
+            const molder_element = molder_ref.current
+            const flex_height = molder_element.offsetHeight
+
+            // Safari browser issue fallback - offset height is undetectable
+            if (flex_height == 0) {
+                container_ref.current.querySelector('.flexi-item').style.marginBottom = '40px'
+            }
+
+            container_ref.current.style.height = 'fit-content'
+            container_ref.current.style.opacity = 1
+        }
+    }, [active])
+
+    return (
+        <Flex
+            position="relative"
+            direction="column"
+            height={height}
+            tablet={{
+                height: '100% !important',
+            }}
+        >
+            <CarouselItem
+                ref={container_ref}
+                position="relative"
+                ai="center"
+                tablet={{ fd: 'column' }}
+            >
+                <FlexiItem
+                    ref={flexible_ref}
+                    p="0 50px"
+                    height="100%"
+                    position="relative"
+                    tablet={{ p: '0px' }}
+                >
+                    {has_active && children_array[active]}
+                </FlexiItem>
+            </CarouselItem>
+            <Molder
+                ref={molder_ref}
+                position="absolute"
+                p="0 50px"
+                height="fit-content"
+                tablet={{ p: '0px' }}
+            >
+                {has_active && children_array[active]}
+            </Molder>
+            {navigations}
+        </Flex>
+    )
+}
+
+export default TestimonialCarousel
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_trade-the-way-you-like.tsx =====
+import React from 'react'
+import styled from 'styled-components'
+import { graphql, useStaticQuery } from 'gatsby'
+import { Header, Text, QueryImage } from 'components/elements'
+import { Localize, localize } from 'components/localization'
+import { SectionContainer } from 'components/containers'
+import { OtherPlatform } from 'components/custom/other-platforms'
+
+type TradeTheWayYouLikeProps = {
+    is_ppc_redirect: boolean
+}
+
+const ImageWrapper = styled.div`
+    max-width: 65rem;
+    margin: 3rem auto 0;
+`
+
+const StyledSection = styled(SectionContainer)`
+    background: linear-gradient(var(--color-grey-11), var(--color-white));
+`
+
+const query = graphql`
+    query {
+        dtrader_artboard: file(relativePath: { eq: "home/dtrader_trade_home.png" }) {
+            ...fadeIn
+        }
+    }
+`
+
+const TradeTheWayYouLike = ({ is_ppc_redirect }: TradeTheWayYouLikeProps) => {
+    const data = useStaticQuery(query)
+    return (
+        <StyledSection padding="5rem 2rem">
+            <Header as="h3" type="section-title" align="center">
+                <Localize translate_text="_t_Trade the way you like_t_" />
+            </Header>
+            <Text size="var(--text-size-sm)" mt="2rem" align="center">
+                <Localize translate_text="_t_Choose from three powerful platforms â€” designed with you in mind_t_" />
+            </Text>
+            <ImageWrapper>
+                <QueryImage
+                    data={data['dtrader_artboard']}
+                    alt={localize('_t_Dtrader artboard_t_')}
+                    loading="eager"
+                />
+            </ImageWrapper>
+            <OtherPlatform exclude="" is_nav is_ppc_redirect={is_ppc_redirect} />
+        </StyledSection>
+    )
+}
+
+export default TradeTheWayYouLike
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_trade.tsx =====
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { graphql, useStaticQuery } from 'gatsby'
+import { TraderCard, BotCard } from 'components/custom/other-platforms'
+import { Localize, localize } from 'components/localization'
+import { SectionContainer, Container, Flex, CssGrid } from 'components/containers'
+import { Header, QueryImage } from 'components/elements'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+const platforms = Object.freeze({
+    trader: 'dtrader',
+    bot: 'dbot',
+    mt5: 'dmt5',
+})
+
+const ImageWrapper = styled.div<{ is_selected: boolean }>`
+    height: 100%;
+    width: 100%;
+    max-width: 65.7rem;
+    visibility: ${({ is_selected }) => (is_selected ? 'initial' : 'hidden')};
+    opacity: ${({ is_selected }) => (is_selected ? '1' : '0')};
+    z-index: ${({ is_selected }) => (is_selected ? '0' : '10')};
+    position: absolute;
+    transition: opacity 0.25s;
+`
+const ImageContainer = styled.div`
+    position: relative;
+    height: 100%;
+    width: 100%;
+`
+const StyledSection = styled(SectionContainer)`
+    background-image: linear-gradient(to bottom, var(--color-grey-30), rgba(238, 238, 238, 0));
+    min-height: 69rem;
+`
+
+const query = graphql`
+    query {
+        dtrader_trade: file(relativePath: { eq: "home/dtrader_trade_home.png" }) {
+            ...fadeIn
+        }
+        dbot_trade: file(relativePath: { eq: "home/dbot_trade_home.png" }) {
+            ...fadeIn
+        }
+    }
+`
+
+type TradeProps = {
+    is_ppc_redirect: boolean
+}
+
+const Trade = ({ is_ppc_redirect }: TradeProps) => {
+    const { region } = useBuildVariant()
+    const data = useStaticQuery(query)
+    // one option always has to be selected
+    const [selected, setSelected] = useState(null)
+
+    return (
+        <StyledSection>
+            <Container direction="column">
+                <Header as="h3" type="section-title" align="center">
+                    <Localize translate_text="_t_Trade the way you like_t_" />
+                </Header>
+                <Header
+                    weight="normal"
+                    as="h4"
+                    type="sub-section-title"
+                    align="center"
+                    m="1.6rem 0 6rem"
+                >
+                    <Localize translate_text="_t_Choose from three powerful platforms â€” designed with you in mind_t_" />
+                </Header>
+                <Flex width="100%" direction="flex-start">
+                    <div style={{ width: '100%', maxWidth: '65.7rem', marginRight: '6rem' }}>
+                        <ImageContainer>
+                            <ImageWrapper is_selected={!selected || selected === platforms.trader}>
+                                <QueryImage
+                                    data={data['dtrader_trade']}
+                                    alt={localize('_t_Dtrader trading platform at Deriv_t_')}
+                                />
+                            </ImageWrapper>
+                            <ImageWrapper is_selected={selected === platforms.bot}>
+                                <QueryImage
+                                    data={data['dbot_trade']}
+                                    alt={localize('_t_Dbot trading platform at Deriv_t_')}
+                                />
+                            </ImageWrapper>
+                        </ImageContainer>
+                    </div>
+                    <div style={{ width: '100%', maxWidth: '38.4rem' }}>
+                        <CssGrid row_gap="1.6rem" height="0%">
+                            <div
+                                onMouseEnter={() => setSelected(platforms.trader)}
+                                onMouseLeave={() => setSelected('')}
+                            >
+                                <TraderCard />
+                            </div>
+                            {region !== "eu" && (
+                                <div
+                                    onMouseEnter={() => setSelected(platforms.bot)}
+                                    onMouseLeave={() => setSelected('')}
+                                >
+                                    <BotCard />
+                                </div>
+                            )}
+                        </CssGrid>
+                    </div>
+                </Flex>
+            </Container>
+        </StyledSection>
+    )
+}
+
+export default Trade
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_translations.tsx =====
+export const translation_strings = [
+    '_t_Trading for anyone.',
+    '_t_Anywhere. Anytime._t_',
+    '_t_Trade CFDs and Options on 1500+ instruments, all in one place with 24/7 trading and 24/7 worldwide support._t_',
+    '_t_Our customers say_t_',
+    '_t_Users worldwide_t_',
+    '_t_Monthly volume_t_',
+    '_t_Established since_t_',
+    '_t_Monthly deals_t_',
+    '_t_Weâ€™re 25 years strong_t_',
+    '_t_Dependable_t_',
+    '_t_Our 99.97% uptime ensures your uninterrupted access to the markets._t_',
+    '_t_Safe and secure_t_',
+    '_t_We keep your personal data and funds safe._t_',
+    '_t_Regulated_t_',
+    '_t_Weâ€™re regulated and licensed by global financial authorities._t_',
+    '_t_24/7 support_t_',
+    '_t_Our professional multilingual team is here for you anytime._t_',
+    '_t_Top trading assets and unique market indices_t_',
+    '_t_Forex at your fingertips._t_',
+    '_t_Currency trading with major, minor, and exotic pairs._t_',
+    '_t_See all forex pairs_t_',
+    '_t_Virtual markets, real opportunities._t_',
+    '_t_Trade simulated markets, as volatile as you like._t_',
+    '_t_See all derived indices_t_',
+    '_t_You call the stocks_t_',
+    '_t_Take a position on your favourite stocks and indices._t_',
+    '_t_See all ETFs_t_',
+    '_t_Mine for commodities._t_',
+    '_t_Trade the price of precious metals and oil._t_',
+    '_t_See all stocks & indices_t_',
+    '_t_Ride the crypto waves._t_',
+    '_t_24/7 trading on the price of popular cryptocurrencies._t_',
+    '_t_See all cryptocurrencie_t_',
+    '_t_Mine for commodities._t_',
+    '_t_Trade the price of precious metals and oil._t_',
+    '_t_See all commodities_t_',
+    '_t_User-friendly trading platforms, on any device_t_',
+    '_t_The most popular and comprehensive CFDs platform._t_',
+    '_t_Fast CFDs platform with inbuilt copy trading._t_',
+    '_t_User-friendly and customisable CFDs platform._t_',
+    '_t_Automated trading. No coding required._t_',
+    '_t_Learn more_t_',
+    '_t_Mobile app for multipliers trading on the go._t_',
+    '_t_Flagship options, accumulators, and multipliers trading platform._t_',
+    '_t_Join over 2.5 million online traders_t_',
+    '_t_Traders Hub_t_',
+    '_t_Trade multipliers on our mobile app._t_',
+    '_t_Trade CFDs, Options, and Multipliers_t_',
+    '_t_Trade with leverage, unbeatable spreads, and fast execution on the widest range of markets._t_',
+    '_t_Trade diverse vanilla and exotic options across platforms and markets without risking more than your initial stake. _t_',
+    '_t_Trade on global financial markets and multiply your potential profit without losing more than your stake._t_',
+    '_t_Start trading in 3 simple steps_t_',
+    '_t_1. Sign up and explore_t_',
+    '_t_Sign up in minutes and explore Traderâ€™s Hub â€” all your trading needs, in one place.  _t_',
+    '_t_2. Try with zero-risk_t_',
+    '_t_Try any trade, on any platform with a zero-risk, demo trading account._t_',
+    '_t_3. Trade with confidence_t_',
+    '_t_Fund your account and start trading with round-the-clock support._t_',
+    '_t_Open demo account_t_',
+    '_t_Fast, hassle-free deposits and withdrawals_t_',
+    '_t_60+ global payment methods. Deposit instantly starting from just USD 5. Withdraw in minutes.*_t_',
+    '_t_* Availability of payment methods and processing speeds may vary based on location and selected payment option_t_',
+    '_t_Trade CFDs & Multipliers_t_',
+    "_t_Trader's Hub_t_",
+]
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_types.ts =====
+import { TString } from 'types/generics'
+
+export type TContent = {
+    id: number
+    text: TString
+}
+export type THeaderItem = {
+    id: number
+    text: TString
+}
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_vertical-carousel.tsx =====
+import React from 'react'
+import styled from 'styled-components'
+import { TContent } from './_types'
+import { Carousel, CarouselProps, Header } from 'components/elements'
+import { Localize } from 'components/localization'
+
+const StyledHeader = styled(Header)`
+    height: 36px;
+    line-height: 36px;
+`
+
+type VerticalCarouselProps = {
+    contents: TContent[]
+}
+
+const settings: CarouselProps = {
+    options: {
+        loop: true,
+        axis: 'y',
+        draggable: false,
+        speed: 7,
+    },
+    container_style: {
+        maxInlineSize: 'auto',
+        marginBlockStart: '24px',
+        marginBlockEnd: '32px',
+        marginInline: '0',
+    },
+    slide_style: {
+        position: 'relative',
+        height: '36px',
+    },
+    vertical_container: {
+        flexDirection: 'column',
+        height: '36px',
+    },
+}
+
+const VerticalCarousel = ({ contents }: VerticalCarouselProps) => {
+    return (
+        <Carousel has_autoplay autoplay_delay={6000} autoplay_interval={2500} {...settings}>
+            {contents.map((content) => (
+                <StyledHeader as="h3" type="sub-section-title" color="white" key={content?.id}>
+                    <Localize translate_text={content.text} />
+                </StyledHeader>
+            ))}
+        </Carousel>
+    )
+}
+
+export default VerticalCarousel
+
+===== C:\Users\HomePC\Documents\TradingPlatform\references\deriv-com\themes\gatsby-theme-deriv\src\pages\home\_what-our-clients-say.tsx =====
+import React, { useEffect, useRef } from 'react'
+import styled from 'styled-components'
+import Carousel from './_testimonial-carousel'
+import { Header, Text } from 'components/elements'
+import { Localize } from 'components/localization'
+import { Container, Flex } from 'components/containers'
+import device from 'themes/device'
+import Quote from 'images/svg/testimonials/quote.svg'
+import { TString } from 'types/generics'
+import useBuildVariant from 'features/hooks/use-build-variant'
+
+declare global {
+    interface Window {
+        Trustpilot: {
+            loadFromElement: (HTMLElement, boolean) => void
+        }
+    }
+}
+
+const StyledContainer = styled.div`
+    background: linear-gradient(76.83deg, #b1c9df 4.59%, #eaf4f5 66.44%);
+    width: 100%;
+    height: fit-content;
+
+    @media ${device.tabletL} {
+        background: linear-gradient(76.48deg, #8aadc5 3.41%, #d3e0e9 64.21%);
+    }
+`
+
+const ClientContainer = styled(Container)`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+`
+
+const ClientFlex = styled(Flex)`
+    max-width: 1440px;
+    min-height: 100px;
+    padding: 80px 48px 65px 120px;
+
+    @media ${device.laptopM} {
+        padding: 80px 48px;
+    }
+    @media ${device.tabletL} {
+        padding: 40px 16px;
+    }
+    @media ${device.tabletS} {
+        max-width: 100%;
+    }
+`
+
+const ClientCard = styled(Flex)`
+    min-height: 231px;
+
+    .trustpilot-container {
+        margin-top: 54px;
+    }
+
+    @media ${device.tabletL} {
+        max-width: 588px;
+        min-height: auto;
+    }
+
+    @media ${device.tabletS} {
+        max-width: 100% !important;
+    }
+`
+
+const TrustPilotWidget = styled(Flex)`
+    a {
+        display: none;
+    }
+    .trustpilot-widget {
+        transform: scale(0.8);
+        position: relative;
+        left: -20px;
+        top: -10px;
+    }
+`
+
+const QuoteIcon = styled.img`
+    position: absolute;
+    width: 160px;
+    height: 128px;
+    top: -60px;
+
+    @media ${device.tabletL} {
+        top: 0;
+        width: 120px;
+        height: 96px;
+    }
+`
+
+const ClientTestimonial = styled(Header)`
+    margin-bottom: 48px;
+
+    @media ${device.tabletL} {
+        margin-bottom: 24px;
+    }
+`
+
+const ClientName = styled(Text)`
+    color: var(--color-black-3);
+
+    @media ${device.tabletL} {
+        font-size: 14px;
+    }
+`
+
+const testimonial_slides: ClientSideProps[] = [
+    {
+        name: 'Angeh',
+        quote: '_t_Weekend trades, fast deposits & withdrawals, plus synthetics trading - whatâ€™s better than this?_t_',
+    },
+    {
+        name: 'O.Silva',
+        quote: '_t_Deriv is the best broker in the world so far in terms of the assets they offer, ease of withdrawals and deposits, plus other services. Keep on giving us the best, Deriv!_t_',
+    },
+    {
+        name: 'Montana',
+        quote: '_t_Deriv P2P makes withdrawals and deposits simple, itâ€™s the best user-friendly app._t_',
+    },
+    {
+        name: 'Sammy',
+        quote: '_t_Deriv P2P is a great app, I love it!_t_',
+    },
+    {
+        name: 'Amina',
+        quote: '_t_Deriv GO is amazingly easy to use._t_',
+    },
+    {
+        name: 'Gladys',
+        quote: '_t_My experience so far is just awesome! You can do instant buying and selling, and I hope to continue enjoying using Deriv P2P. Keep up the good work!_t_',
+    },
+    {
+        name: 'John',
+        quote: '_t_I have never seen a platform that is so flexible with multiple resources that meet everyoneâ€™s needs. If thatâ€™s not enough, Deriv is second to none on customer support services!_t_',
+    },
+    {
+        name: 'Frank',
+        quote: '_t_Excellent and reliable services; tested and trusted!_t_',
+    },
+    {
+        name: 'Aaron',
+        quote: '_t_Deriv has multiple withdrawal methods, including Deriv P2P, which is fast and convenient. Their support team is available any time and responds very quickly to any queries._t_',
+    },
+    {
+        name: 'O. Victor',
+        quote: '_t_Deriv GO is a very nice app â€“ payments have been swift and easy. I would highly recommend it._t_',
+    },
+    {
+        name: 'Isaac',
+        quote: '_t_Deriv is the most reliable broker - excellent customer support and fast payments. Itâ€™s a great platform for commodities, forex, and synthetics trading._t_',
+    },
+    {
+        name: 'Simon',
+        quote: '_t_Low spreads on Synthetics and fast withdrawals - Deriv is a good broker!_t_',
+    },
+    {
+        name: 'Allan',
+        quote: '_t_Deriv P2P is good. Itâ€™s easy to deposit and withdraw for small traders._t_',
+    },
+    {
+        name: 'Francoise',
+        quote: "_t_It's the best broker in the world. I will recommend it to anyone every day all the time. Their support agents are really helpful in all areas._t_",
+    },
+    {
+        name: 'Katleho',
+        quote: "_t_Wow! Deriv GO is so perfect, it's convenient and reliable. I highly recommend using the app._t_",
+    },
+    {
+        name: 'Jackline',
+        quote: "_t_I've been a trader for many years, and I've never encountered a good broker like Deriv before â€“ it's the best for customer care and payment options!_t_",
+    },
+    {
+        name: 'Freeman',
+        quote: '_t_Deriv P2P is a flawless innovation._t_',
+    },
+    {
+        name: 'Vikas',
+        quote: "_t_It's been a really great experience trading forex on Deriv - it's a smooth and seamless operation!_t_",
+    },
+    {
+        name: 'Moyz',
+        quote: "_t_Deriv GO is really good! I've been looking for an app like this which is easy to use._t_",
+    },
+    {
+        name: 'LS',
+        quote: '_t_Deriv is the best forex broker I have ever come across!_t_',
+    },
+]
+
+const filtered_testimonial = (unavailable_testimonial) =>
+    testimonial_slides.filter(({ quote }) => {
+        const lowered_quote = quote.toLowerCase()
+        let show = true
+        unavailable_testimonial.forEach(
+            (unavailable) => lowered_quote.includes(unavailable) && (show = false),
+        )
+        return show
+    })
+
+const unavailable_testimonial_eu = ['p2p', 'deriv go']
+
+type ClientSideProps = {
+    quote: TString
+    name: string
+}
+
+const ClientSlide = ({ quote, name }: ClientSideProps) => (
+    <Flex direction="column" height="100%" jc="space-between" max_width="588px">
+        <ClientTestimonial type="subtitle-1" weight="normal" lh={'36px'} className="flexi-item">
+            <Localize translate_text={quote} />
+        </ClientTestimonial>
+        <Flex direction="column" height="fit-content">
+            <ClientName size={'16px'} weight="700">
+                {name}
+            </ClientName>
+        </Flex>
+    </Flex>
+)
+
+const WhatOurClientsSay = () => {
+    const { region } = useBuildVariant()
+    const ref = useRef()
+
+    useEffect(() => {
+        window?.Trustpilot?.loadFromElement(ref.current, true)
+    }, [])
+
+    return (
+        <StyledContainer>
+            <ClientContainer>
+                <ClientFlex
+                    jc="space-between"
+                    ai="center"
+                    height="fit-content"
+                    width="100%"
+                    tabletL={{ fd: 'column' }}
+                >
+                    <ClientCard
+                        direction="column"
+                        mr="36px"
+                        max_width="384px"
+                        tabletL={{
+                            max_width: '588px',
+                            mb: '24px',
+                            mr: '0px',
+                        }}
+                    >
+                        <Header as="h2" type="heading-2">
+                            <Localize translate_text="_t_What our clients say about Deriv_t_" />
+                        </Header>
+                        <TrustPilotWidget
+                            m="40px 0 0"
+                            width="240px"
+                            height="100px"
+                            tabletL={{ m: '24px 0 0' }}
+                        >
+                            <div
+                                ref={ref}
+                                className="trustpilot-widget"
+                                data-locale="en-US"
+                                data-template-id="53aa8807dec7e10d38f59f32"
+                                data-businessunit-id="5ed4c8a9f74f310001f51bf7"
+                                data-style-height="150px"
+                                data-style-width="100%"
+                                data-theme="light"
+                            >
+                                <a
+                                    href="https://www.trustpilot.com/review/deriv.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Trustpilot
+                                </a>
+                            </div>
+                        </TrustPilotWidget>
+                    </ClientCard>
+                    <ClientCard position="relative" direction="column">
+                        <QuoteIcon src={Quote} alt="" />
+                        <Flex
+                            ml="auto"
+                            pl="40px"
+                            max_width="690px"
+                            tablet={{
+                                pl: '0',
+                                max_width: '588px',
+                                m: '0 auto',
+                                pt: '68px',
+                            }}
+                        >
+                            <Carousel>
+                                {(
+                                    (region === "eu" && filtered_testimonial(unavailable_testimonial_eu)) ||
+                                    testimonial_slides
+                                ).map(({ name, quote }) => (
+                                    <ClientSlide key={name} quote={quote} name={name} />
+                                ))}
+                            </Carousel>
+                        </Flex>
+                    </ClientCard>
+                </ClientFlex>
+            </ClientContainer>
+        </StyledContainer>
+    )
+}
+
+export default WhatOurClientsSay

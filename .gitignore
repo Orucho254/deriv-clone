@@ -1,0 +1,17 @@
+﻿
+node_modules/
+.cache/
+.npm/
+dist/
+.next/
+.env
+.env.*
+*.log
+*.har
+*.pem
+*.key
+*.original
+*-analysis.json
+coverage/
+references/deriv-com/sites/row/public/
+references/deriv-com/sites/eu/public/
